@@ -1,0 +1,15 @@
+{
+  "name": "planet4-develop",
+  "version": "1.0.0",
+  "description": "Planet 4 development environment",
+  "author": "Planet 4",
+  "devDependencies": {
+  },
+  "scripts": {
+    "env:install": "./scripts/install.sh",
+    "env:clean": "./scripts/clean.sh",
+    "env:nro-install": "",
+    "env:theme-install": "",
+    "env:fix-permissions": ""
+  }
+}

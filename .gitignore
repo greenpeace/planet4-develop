@@ -1,0 +1,4 @@
+cache/*
+content/*
+planet4/*
+.wp-env.*.json

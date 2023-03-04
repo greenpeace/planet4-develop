@@ -1,0 +1,17 @@
+{
+  "phpVersion": "7.4",
+  "core": "WordPress/WordPress#6.1.1",
+  "mappings": {
+    "wp-content/themes": "./planet4/themes",
+    "wp-content/plugins": "./planet4/plugins"
+  },
+  "config": {
+    "KEY_1": true,
+    "KEY_2": false
+  },
+  "env": {
+    "development": {
+      "port": 80
+    }
+  }
+}
