@@ -6,7 +6,7 @@
   "devDependencies": {
   },
   "scripts": {
-    "env:install": "./scripts/install.sh",
+    "env:install": "node ./scripts/install.js",
     "env:clean": "./scripts/clean.sh",
     "env:nro-install": "",
     "env:theme-install": "",
