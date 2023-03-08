@@ -24,7 +24,7 @@ function generateBaseComposerRequirements(config) {
 
 function generateNROComposerRequirements(config) {
   const nroComposerFile = `composer-${config.nro.name}.json`;
-  copyFileSync(`${nroDir}/composer-local.json`, `${config.appDir}/${nroComposerFile}`);
+  copyFileSync(`${config.nro.dir}/composer-local.json`, `${config.appDir}/${nroComposerFile}`);
 
   const composerConfig = JSON.parse(readFileSync(`${config.appDir}/composer.json`));
   const nroComposerConfig = JSON.parse(readFileSync(`${config.appDir}/${nroComposerFile}`)) || {};

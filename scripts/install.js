@@ -3,8 +3,8 @@ const { nodeCheck } = require('./lib/node-check');
 const { getConfig } = require('./lib/config');
 const { run } = require('./lib/run');
 const { getMainReposFromGit, installRepos, buildAssets } = require('./lib/main-repos');
-const { createDatabase, importDatabase } = require('./lib/mysql');
 const { generateBaseComposerRequirements } = require('./lib/composer-requirements');
+const { createDatabase, importDatabase } = require('./lib/mysql');
 
 /**
  * Node version control
@@ -47,6 +47,7 @@ generateBaseComposerRequirements(config);
 /**
  * Install themes/plugins
  */
+run(`wp-env run composer -d /app/${config.appDir}/ update --ignore-platform-reqs`);
 console.log('Activating plugins ...');
 run('wp-env run cli plugin activate --all');
 

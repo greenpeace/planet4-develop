@@ -1,15 +1,6 @@
 const { existsSync, lstatSync } = require('fs');
-const { nodeCheck } = require('./lib/node-check');
 const { getConfig } = require('./lib/config');
 const { run } = require('./lib/run');
-const { getMainReposFromRelease, installRepos } = require('./lib/main-repos');
-const { generateBaseComposerRequirements, generateNROComposerRequirements } = require('./lib/composer-requirements');
-
-/**
- * Node version control
- */
-console.log('Node version: ' + process.version);
-nodeCheck();
 
 /**
  * Config
@@ -20,38 +11,6 @@ if (!config.nro) {
   console.log('Please specify NRO name by using .p4-env.json file');
   process.exit(1);
 }
-
-/**
- * Install main repos
- */
-console.log('Cloning base repo ...');
-existsSync(`${config.baseDir}`) && lstatSync(`${config.baseDir}`).isDirectory()
-  ? run('git status', {cwd: `${config.baseDir}`})
-  : run(`git clone git@github.com:greenpeace/planet4-base.git ${config.baseDir}`);
-
-console.log('Fetching main repos ...');
-getMainReposFromRelease(config);
-installRepos(config)
-
-/**
- * Install NRO deployment repo
- */
-console.log('Cloning deployment repo ...');
-existsSync(`${config.nro.dir}`) && lstatSync(`${config.nro.dir}`).isDirectory()
-  ? run('git status', {cwd: `${config.nro.dir}`})
-  : run(`git clone git@github.com:greenpeace/${config.nro.repo}.git ${config.nro.dir}`);
-
-/**
- * Start WP
- */
-run('wp-env stop');
-run('wp-env start --update');
-
-/**
- * Merge composer requirements
- */
-console.log('Merging base composer requirements ...');
-generateBaseComposerRequirements(config);
 
 /**
  * Merge NRO composer requirements with base
@@ -80,11 +39,9 @@ run(`wp-env run composer -d /app/${config.appDir}/ update --ignore-platform-reqs
 if (themeName) {
   run(`wp-env run cli theme activate ${themeName}`);
 }
-
 /**
  * Database
  */
 // @todo:
-// - Fetch DB
 // - Switch DB
 // - Add reverse proxy

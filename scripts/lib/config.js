@@ -8,7 +8,8 @@ function getConfig() {
   const nroConfig = p4EnvConfig.nro ? {
     name: p4EnvConfig.nro,
     db: `planet4_${p4EnvConfig.nro.replace('-', '_')}`,
-    repo: `planet4-${p4EnvConfig.nro}`
+    repo: `planet4-${p4EnvConfig.nro}`,
+    dir: `${appDir}/planet4-${p4EnvConfig.nro}`
   } : null
 
   const config = {

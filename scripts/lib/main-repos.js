@@ -3,7 +3,7 @@ const { renameSync, existsSync, lstatSync } = require('fs');
 const { run } = require('./run');
 
 function getMainReposFromGit({themesDir, pluginsDir}) {
-  run (`mkdir -p ${config.themesDir} && mkdir -p ${config.pluginsDir}`);
+  run (`mkdir -p ${themesDir} && mkdir -p ${pluginsDir}`);
 
   existsSync(`${themesDir}/planet4-master-theme`) && lstatSync(`${themesDir}/planet4-master-theme`).isDirectory()
     ? run('git status', {cwd: `${themesDir}/planet4-master-theme`})

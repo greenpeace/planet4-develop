@@ -6,11 +6,13 @@
   "scripts": {
     "env:install": "node ./scripts/install.js",
     "env:clean": "node ./scripts/clean.js",
-    "env:fix-permissions": "node ./scripts/permissions.js",
+    "env:fix-permissions": "node ./scripts/fix-permissions.js",
     "nro:install": "node ./scripts/nro-install.js",
     "nro:enable": "node ./scripts/nro-enable.js",
     "nro:disable": "node ./scripts/nro-disable.js",
     "build:assets": "node ./scripts/build-assets.js",
-    "build:repos": "node ./scripts/build-repos.js"
+    "build:repos": "node ./scripts/build-repos.js",
+    "db:import": "node ./scripts/db-import.js",
+    "db:use": "node ./scripts/db-use.js"
   }
 }
