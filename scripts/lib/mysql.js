@@ -18,10 +18,26 @@ function mysqlRootCommandNoTTY(cmd) {
   return `docker-compose -f \$(wp-env install-path)/docker-compose.yml exec -T mysql mysql -uroot -ppassword ${cmd}`;
 };
 
+function createDatabase(dbName) {
+  mysqlRootExec(`-e \\
+    "CREATE DATABASE IF NOT EXISTS ${dbName}; \\
+      GRANT all privileges on ${dbName}.* to 'root'@'%'; \\
+      USE ${dbName};"`);
+}
+
+function importDatabase(gzFilepath, dbName) {
+  mysqlRootExec('-e \'SET GLOBAL max_allowed_packet=16777216\'');
+  run(`zcat < "${gzFilepath}" | ${mysqlRootCommandNoTTY(dbName)}`);
+  // Fix GTID_PURGED value issue
+  // mysqlRootExec -D ${dbName} -e 'RESET MASTER'
+}
+
 module.exports = {
   mysqlRootExec,
   mysqlRootExecNoTTY,
   mysqlRootCommand,
-  mysqlRootCommandNoTTY
+  mysqlRootCommandNoTTY,
+  createDatabase,
+  importDatabase
 }
 

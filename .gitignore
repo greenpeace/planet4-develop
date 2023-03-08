@@ -1,4 +1,5 @@
 cache/*
 content/*
 planet4/*
+.p4-env.json
 .wp-env.*.json

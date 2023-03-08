@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "description": "Planet 4 development environment",
   "author": "Planet 4",
-  "devDependencies": {
-  },
   "scripts": {
     "env:install": "node ./scripts/install.js",
     "env:clean": "node ./scripts/clean.js",
     "env:fix-permissions": "node ./scripts/permissions.js",
     "nro:install": "node ./scripts/nro-install.js",
-    "env:theme-install": ""
+    "nro:enable": "node ./scripts/nro-enable.js",
+    "nro:disable": "node ./scripts/nro-disable.js",
+    "build:assets": "node ./scripts/build-assets.js",
+    "build:repos": "node ./scripts/build-repos.js"
   }
 }
