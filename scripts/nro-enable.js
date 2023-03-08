@@ -1,6 +1,7 @@
 const { existsSync, lstatSync } = require('fs');
 const { getConfig } = require('./lib/config');
 const { run } = require('./lib/run');
+const { generateNROComposerRequirements } = require('./lib/composer-requirements');
 
 /**
  * Config

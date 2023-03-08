@@ -2,6 +2,7 @@ const { existsSync, lstatSync, mkdirSync } = require('fs');
 const { nodeCheck } = require('./lib/node-check');
 const { getConfig } = require('./lib/config');
 const { run } = require('./lib/run');
+const { download } = require('./lib/download');
 const { getMainReposFromGit, installRepos, buildAssets } = require('./lib/main-repos');
 const { generateBaseComposerRequirements } = require('./lib/composer-requirements');
 const { createDatabase, importDatabase } = require('./lib/mysql');
@@ -47,21 +48,23 @@ generateBaseComposerRequirements(config);
 /**
  * Install themes/plugins
  */
-run(`wp-env run composer -d /app/${config.appDir}/ update --ignore-platform-reqs`);
 console.log('Activating plugins ...');
+run(`wp-env run composer -d /app/${config.appDir}/ update --ignore-platform-reqs`);
 run('wp-env run cli plugin activate --all');
 
 /**
  * Database
  */
 if (!existsSync('content')) {
-    mkdirSync('content');
+  mkdirSync('content');
 }
-run('curl --fail https://storage.googleapis.com/planet4-default-content/planet4-defaultcontent_wordpress-v0.2.13.sql.gz > content/planet4-defaultcontent_wordpress-v0.2.13.sql.gz');
-
 const dbName = 'planet4_dev';
+const dbDump = 'planet4-defaultcontent_wordpress-v0.2.13.sql.gz';
+download(
+  `https://storage.googleapis.com/planet4-default-content/${dbDump}`,
+  `content/${dbDump}`
+);
 createDatabase(dbName);
-importDatabase('content/planet4-defaultcontent_wordpress-v0.2.13.sql.gz', dbName);
-
+importDatabase(`content/${dbDump}`, dbName);
 run(`wp-env run cli config set DB_NAME ${dbName}`);
 run('wp-env run cli user update admin --user_pass=admin --role=administrator');

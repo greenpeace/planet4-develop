@@ -6,6 +6,7 @@
   "scripts": {
     "env:install": "node ./scripts/install.js",
     "env:clean": "node ./scripts/clean.js",
+    "env:config": "node ./scripts/config.js",
     "env:fix-permissions": "node ./scripts/fix-permissions.js",
     "nro:install": "node ./scripts/nro-install.js",
     "nro:enable": "node ./scripts/nro-enable.js",
