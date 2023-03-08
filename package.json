@@ -7,9 +7,9 @@
   },
   "scripts": {
     "env:install": "node ./scripts/install.js",
-    "env:clean": "./scripts/clean.sh",
-    "env:nro-install": "",
-    "env:theme-install": "",
-    "env:fix-permissions": ""
+    "env:clean": "node ./scripts/clean.js",
+    "env:fix-permissions": "node ./scripts/permissions.js",
+    "nro:install": "node ./scripts/nro-install.js",
+    "env:theme-install": ""
   }
 }

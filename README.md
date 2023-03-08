@@ -53,3 +53,8 @@
 - get_x_from_release
 - build_assets
 - import DB
+
+## Images
+- dl default content, map uploads directory
+- reverse proxy
+  - similar to nginx, but for Apache2

@@ -1,15 +1,13 @@
-const { execSync } = require('child_process');
+const { run } = require('./run');
 
 function mysqlRootExec(cmd) {
   const dcCommand = mysqlRootCommand(cmd);
-  console.log(dcCommand);
-  return execSync(dcCommand, {stdio: 'inherit'});
+  return run(dcCommand);
 };
 
 function mysqlRootExecNoTTY(cmd) {
   const dcCommand = mysqlRootCommandNoTTY(cmd);
-  console.log(dcCommand);
-  return execSync(dcCommand, {stdio: 'inherit'});
+  return run(dcCommand);
 };
 
 function mysqlRootCommand(cmd) {
