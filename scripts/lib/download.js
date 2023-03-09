@@ -5,7 +5,7 @@ function download(src, dest) {
 }
 
 function downloadFromGcloud(src, dest) {
-  // @todo
+  run(`gsutil cp ${src} ${dest}`);
 }
 
 module.exports = {

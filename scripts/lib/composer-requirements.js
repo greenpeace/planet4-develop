@@ -1,5 +1,6 @@
-const { readFileSync, writeFileSync, existsSync, lstatSync, copyFileSync } = require('fs');
+const { readFileSync, writeFileSync, copyFileSync } = require('fs');
 const { run } = require('./run');
+const { isDir } = require('./utils');
 
 function generateBaseComposerRequirements(config) {
   copyFileSync(`${config.baseDir}/composer.json`, `${config.appDir}/composer.json`);
@@ -9,36 +10,31 @@ function generateBaseComposerRequirements(config) {
   run(`wp-env run composer -d /app/${config.appDir}/ config --json extra.installer-paths '"{\\"plugins/{\\$name}/\\": [\\"type:wordpress-plugin\\"],\\"themes/{\\$name}/\\": [\\"type:wordpress-theme\\"]}"'`);
   run(`wp-env run composer -d /app/${config.appDir}/ config platform.php "${config.phpVersion}"`);
 
-  if (existsSync(`${config.themesDir}/planet4-master-theme`)
-      && lstatSync(`${config.themesDir}/planet4-master-theme`).isDirectory()
-  ) {
+  if (isDir(`${config.themesDir}/planet4-master-theme`)) {
       run(`wp-env run composer -d /app/${config.appDir}/ remove --no-update greenpeace/planet4-master-theme`);
   }
 
-  if (existsSync(`${config.pluginsDir}/planet4-plugin-gutenberg-blocks`)
-      && lstatSync(`${config.pluginsDir}/planet4-plugin-gutenberg-blocks`).isDirectory()
-  ) {
+  if (isDir(`${config.pluginsDir}/planet4-plugin-gutenberg-blocks`)) {
       run(`wp-env run composer -d /app/${config.appDir}/ remove --no-update greenpeace/planet4-plugin-gutenberg-blocks`);
   }
+
+  return JSON.parse(readFileSync(`${config.appDir}/composer.json`));
 }
 
 function generateNROComposerRequirements(config) {
-  const nroComposerFile = `composer-${config.nro.name}.json`;
-  copyFileSync(`${config.nro.dir}/composer-local.json`, `${config.appDir}/${nroComposerFile}`);
-
-  const composerConfig = JSON.parse(readFileSync(`${config.appDir}/composer.json`));
-  const nroComposerConfig = JSON.parse(readFileSync(`${config.appDir}/${nroComposerFile}`)) || {};
+  const baseComposerConfig = JSON.parse(readFileSync(`${config.appDir}/composer.json`));
+  const nroComposerConfig = JSON.parse(readFileSync(`${config.nro.dir}/composer-local.json`)) || {};
 
   const merged = {
-    "require": { ...composerConfig.require, ...nroComposerConfig.require },
-    "config": { ...composerConfig.config, ...nroComposerConfig.config },
-    "scripts": { ...composerConfig.scripts, ...nroComposerConfig.scripts },
+    "require": { ...baseComposerConfig.require, ...nroComposerConfig.require },
+    "config": { ...baseComposerConfig.config, ...nroComposerConfig.config },
+    "scripts": { ...baseComposerConfig.scripts, ...nroComposerConfig.scripts },
   };
-  const newComposerConfig = { ...composerConfig, ...merged };
+  const composerConfig = { ...baseComposerConfig, ...merged };
   // @todo: resolve composer scripts and/or `wp` usage from composer container
-  writeFileSync(`${config.appDir}/composer.json`, JSON.stringify(newComposerConfig));
+  writeFileSync(`${config.appDir}/composer.json`, JSON.stringify(composerConfig));
 
-  return newComposerConfig;
+  return composerConfig;
 }
 
 module.exports = {

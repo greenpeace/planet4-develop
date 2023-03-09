@@ -1,6 +1,6 @@
-
 const { renameSync, existsSync, lstatSync } = require('fs');
 const { run } = require('./run');
+const { cloneIfNotExists } = require('./utils');
 
 function getMainReposFromGit({themesDir, pluginsDir}) {
   run (`mkdir -p ${themesDir} && mkdir -p ${pluginsDir}`);
@@ -40,6 +40,13 @@ function installRepos(config) {
   run(`wp-env run composer -d /app/${config.pluginsDir}/planet4-plugin-gutenberg-blocks install --ignore-platform-reqs`);
 }
 
+function installNpmDependencies(config) {
+  process.env.PUPPETEER_SKIP_DOWNLOAD = true;
+  process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true;
+  run('npm install', {cwd: `${config.themesDir}/planet4-master-theme`});
+  run('npm install', {cwd: `${config.pluginsDir}/planet4-plugin-gutenberg-blocks`});
+}
+
 function buildAssets(config, force=false) {
   if (!force
     && existsSync(`${config.themesDir}/planet4-master-theme/assets/build`)
@@ -48,10 +55,9 @@ function buildAssets(config, force=false) {
     return;
   }
 
-  process.env.PUPPETEER_SKIP_DOWNLOAD = true;
-  process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true;
-  run('npm install && npm run build', {cwd: `${config.themesDir}/planet4-master-theme`});
-  run('npm install && npm run build', {cwd: `${config.pluginsDir}/planet4-plugin-gutenberg-blocks`});
+  installNpmDependencies(config);
+  run('npm run build', {cwd: `${config.themesDir}/planet4-master-theme`});
+  run('npm run build', {cwd: `${config.pluginsDir}/planet4-plugin-gutenberg-blocks`});
 }
 
 module.exports = {

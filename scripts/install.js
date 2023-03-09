@@ -5,7 +5,8 @@ const { run } = require('./lib/run');
 const { download } = require('./lib/download');
 const { getMainReposFromGit, installRepos, buildAssets } = require('./lib/main-repos');
 const { generateBaseComposerRequirements } = require('./lib/composer-requirements');
-const { createDatabase, importDatabase } = require('./lib/mysql');
+const { createDatabase, importDatabase, useDatabase } = require('./lib/mysql');
+const { cloneIfNotExists } = require('./utils');
 
 /**
  * Node version control
@@ -17,19 +18,18 @@ nodeCheck();
  * Config
  */
 const config = getConfig();
-console.log(process.cwd(), config);
+console.log(process.cwd(), '\n', config);
 
 /**
  * Install main repos
  */
 console.log('Cloning base repo ...');
-existsSync(`${config.baseDir}`) && lstatSync(`${config.baseDir}`).isDirectory()
-  ? run('git status', {cwd: `${config.baseDir}`})
-  : run(`git clone git@github.com:greenpeace/planet4-base.git ${config.baseDir}`);
+cloneIfNotExists(config.baseDir, 'git@github.com:greenpeace/planet4-base.git');
 
 console.log('Cloning and installing main repos ...');
 getMainReposFromGit(config);
 installRepos(config);
+
 console.log('Generating assets ...');
 buildAssets(config);
 
@@ -37,7 +37,7 @@ buildAssets(config);
  * Start WP
  */
 run('wp-env stop');
-run('wp-env start --update');
+run('wp-env start');
 
 /**
  * Merge composer requirements
@@ -48,13 +48,14 @@ generateBaseComposerRequirements(config);
 /**
  * Install themes/plugins
  */
-console.log('Activating plugins ...');
+console.log('Installing & activating plugins ...');
 run(`wp-env run composer -d /app/${config.appDir}/ update --ignore-platform-reqs`);
 run('wp-env run cli plugin activate --all');
 
 /**
  * Database
  */
+console.log('Importing default database ...');
 if (!existsSync('content')) {
   mkdirSync('content');
 }
@@ -66,5 +67,7 @@ download(
 );
 createDatabase(dbName);
 importDatabase(`content/${dbDump}`, dbName);
-run(`wp-env run cli config set DB_NAME ${dbName}`);
+useDatabase(dbName);
 run('wp-env run cli user update admin --user_pass=admin --role=administrator');
+
+console.log('Ready !');

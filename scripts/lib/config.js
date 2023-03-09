@@ -1,6 +1,6 @@
 const { readFileSync } = require('fs');
 
-function getConfig() {
+function getConfig(nro) {
   const wpEnvConfig = JSON.parse(readFileSync('./.wp-env.json'));
   const p4EnvConfig = JSON.parse(readFileSync('./.p4-env.json')) || {};
   const appDir = 'planet4';
@@ -13,7 +13,7 @@ function getConfig() {
       verbose: process.env.VERBOSE || false,
       ...wpEnvConfig,
       ...p4EnvConfig,
-      nro: getNroConfig(p4EnvConfig.nro || null, appDir)
+      nro: getNroConfig(nro || p4EnvConfig.nro || null, appDir)
   };
 
   return config;
