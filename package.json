@@ -11,6 +11,7 @@
     "nro:install": "node ./scripts/nro-install.js",
     "nro:enable": "node ./scripts/nro-enable.js",
     "nro:disable": "node ./scripts/nro-disable.js",
+    "nro:theme": "node ./scripts/nro-theme.js",
     "build:assets": "node ./scripts/build-assets.js",
     "build:repos": "node ./scripts/build-repos.js",
     "db:import": "node ./scripts/db-import.js",

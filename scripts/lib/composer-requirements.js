@@ -23,7 +23,7 @@ function generateBaseComposerRequirements(config) {
 
 function generateNROComposerRequirements(config) {
   const baseComposerConfig = JSON.parse(readFileSync(`${config.appDir}/composer.json`));
-  const nroComposerConfig = JSON.parse(readFileSync(`${config.nro.dir}/composer-local.json`)) || {};
+  const nroComposerConfig = getNroComposerRequirements(config);
 
   const merged = {
     "require": { ...baseComposerConfig.require, ...nroComposerConfig.require },
@@ -37,7 +37,12 @@ function generateNROComposerRequirements(config) {
   return composerConfig;
 }
 
+function getNroComposerRequirements(config) {
+  return JSON.parse(readFileSync(`${config.nro.dir}/composer-local.json`)) || {};
+}
+
 module.exports = {
   generateBaseComposerRequirements,
-  generateNROComposerRequirements
+  generateNROComposerRequirements,
+  getNroComposerRequirements
 }

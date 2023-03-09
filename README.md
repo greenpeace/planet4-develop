@@ -42,6 +42,7 @@ npm run
 - nro:install <?nro>                Install NRO theme and database, if declared in .p4-env.json
 - nro:enable                        Enable installed NRO theme and database
 - nro:disable                       Switch back to default theme and database
+- nro:theme <?nro>                  Clone NRO theme in themes dir
 - build:assets                      Build main repos assets
 - build:repos                       Clone and install main repos
 - db:import <dump path> <db name>   Import database dump (gzip)
