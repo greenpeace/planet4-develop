@@ -72,3 +72,7 @@ npm run
 - dl default content, map uploads directory
 - reverse proxy
   - similar to nginx, but for Apache2
+
+## Rewrite rules
+- adapt to Apache2
+- make it work for wpml urls
