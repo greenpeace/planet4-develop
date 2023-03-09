@@ -85,6 +85,9 @@ if (themeName) {
 if (databaseExists(config.nro.db)) {
   console.log(`Database ${config.nro.db} already exists, skipping database import.`);
   useDatabase(config.nro.db);
+  if (themeName) {
+    run(`wp-env run cli theme activate ${themeName}`);
+  }
   process.exit(0);
 }
 
@@ -100,3 +103,6 @@ if (dumpUrl) {
   useDatabase(config.nro.db);
 }
 run('wp-env run cli user update admin --user_pass=admin --role=administrator');
+if (themeName) {
+  run(`wp-env run cli theme activate ${themeName}`);
+}
