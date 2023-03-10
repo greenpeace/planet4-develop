@@ -6,7 +6,7 @@ const { download } = require('./lib/download')
 const { getMainReposFromGit, installRepos, buildAssets } = require('./lib/main-repos')
 const { generateBaseComposerRequirements } = require('./lib/composer-requirements')
 const { createDatabase, importDatabase, useDatabase } = require('./lib/mysql')
-const { makeDirStructure, cloneIfNotExists } = require('./lib/utils')
+const { makeDirStructure, cloneIfNotExists, installPluginsDependencies } = require('./lib/utils')
 
 /**
  * Node version control
@@ -51,6 +51,7 @@ generateBaseComposerRequirements(config)
  */
 console.log('Installing & activating plugins ...')
 run(`wp-env run composer -d /app/${config.appDir}/ update --ignore-platform-reqs`)
+installPluginsDependencies(config)
 run('wp-env run cli plugin activate --all')
 
 /**

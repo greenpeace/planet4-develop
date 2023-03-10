@@ -1,4 +1,6 @@
 
+![Last pipeline result on main branch](https://gitlab.com/lithrel/planet4-develop/badges/main/pipeline.svg)
+
 # Requirements
 
 - docker, docker-compose

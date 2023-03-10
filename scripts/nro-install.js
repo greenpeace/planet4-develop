@@ -3,9 +3,10 @@ const { getConfig } = require('./lib/config')
 const { run } = require('./lib/run')
 const { getMainReposFromRelease, installRepos } = require('./lib/main-repos')
 const { generateBaseComposerRequirements, generateNROComposerRequirements } = require('./lib/composer-requirements')
-const { makeDirStructure, cloneIfNotExists } = require('./lib/utils')
+const { makeDirStructure, cloneIfNotExists, installPluginsDependencies } = require('./lib/utils')
 const { createDatabase, importDatabase, databaseExists, useDatabase } = require('./lib/mysql')
 const { basename } = require('path')
+const { existsSync } = require('fs')
 
 /**
  * Node version control
@@ -70,9 +71,14 @@ if (theme) {
   const themePath = `${config.themesDir}/${themeName}`
   cloneIfNotExists(themePath, `git@github.com:${theme}.git`)
   run(`wp-env run composer -d /app/${config.appDir}/ remove --no-update ${theme}`)
+
+  if (existsSync(`${themePath}/composer.json`)) {
+    run(`wp-env run composer -d /app/${themePath}/ update --ignore-platform-reqs`)
+  }
 }
 
 run(`wp-env run composer -d /app/${config.appDir}/ update --ignore-platform-reqs`)
+installPluginsDependencies(config)
 if (themeName) {
   run(`wp-env run cli theme activate ${themeName}`)
 }

@@ -14,3 +14,4 @@ lint-job:
     - echo "Linting the code..."
     - npm run lint -- scripts
     - echo "Linting complete."
+  timeout: 5m
