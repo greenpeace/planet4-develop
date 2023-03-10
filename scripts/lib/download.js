@@ -1,11 +1,11 @@
-const { run } = require('./run');
+const { run } = require('./run')
 
-function download(src, dest) {
-  run(`curl -L --fail ${src} > ${dest}`);
+function download (src, dest) {
+  run(`curl -L --fail ${src} > ${dest}`)
 }
 
-function downloadFromGcloud(src, dest) {
-  run(`gsutil cp ${src} ${dest}`);
+function downloadFromGcloud (src, dest) {
+  run(`gsutil cp ${src} ${dest}`)
 }
 
 module.exports = {

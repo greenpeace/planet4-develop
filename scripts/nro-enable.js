@@ -1,41 +1,40 @@
-const { existsSync, lstatSync } = require('fs');
-const { getConfig } = require('./lib/config');
-const { run } = require('./lib/run');
-const { generateNROComposerRequirements } = require('./lib/composer-requirements');
-const { cloneIfNotExists } = require('./utils');
+const { getConfig } = require('./lib/config')
+const { run } = require('./lib/run')
+const { generateNROComposerRequirements } = require('./lib/composer-requirements')
+const { cloneIfNotExists } = require('./utils')
 
 /**
  * Config
  */
-const config = getConfig();
-console.log(process.cwd(), config);
+const config = getConfig()
+console.log(process.cwd(), config)
 if (!config.nro) {
-  console.log('Please specify NRO name by using .p4-env.json file');
-  process.exit(1);
+  console.log('Please specify NRO name by using .p4-env.json file')
+  process.exit(1)
 }
 
 /**
  * Merge NRO composer requirements with base
  */
-console.log('Merging NRO composer requirements ...');
-composerConfig = generateNROComposerRequirements(config);
+console.log('Merging NRO composer requirements ...')
+const composerConfig = generateNROComposerRequirements(config)
 const keys = Object.keys(composerConfig.require || {}).filter(k => k.startsWith('greenpeace/planet4-child-theme'))
-const theme = keys[0] || null;
+const theme = keys[0] || null
 
 /**
  * Install NRO theme & plugins
  */
-let themeName = null;
+let themeName = null
 if (theme) {
-  themeName = theme.replace('greenpeace/', '');
-  const themePath = `${config.themesDir}/${themeName}`;
-  cloneIfNotExists(themePath, `git@github.com:${theme}.git`);
-  run(`wp-env run composer -d /app/${config.appDir}/ remove --no-update ${theme}`);
+  themeName = theme.replace('greenpeace/', '')
+  const themePath = `${config.themesDir}/${themeName}`
+  cloneIfNotExists(themePath, `git@github.com:${theme}.git`)
+  run(`wp-env run composer -d /app/${config.appDir}/ remove --no-update ${theme}`)
 }
 
-run(`wp-env run composer -d /app/${config.appDir}/ update --ignore-platform-reqs`);
+run(`wp-env run composer -d /app/${config.appDir}/ update --ignore-platform-reqs`)
 if (themeName) {
-  run(`wp-env run cli theme activate ${themeName}`);
+  run(`wp-env run cli theme activate ${themeName}`)
 }
 
 /**

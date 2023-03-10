@@ -1,7 +1,7 @@
-const { getConfig } = require('./lib/config');
-const { getMainReposFromGit, installRepos } = require('./lib/main-repos');
+const { getConfig } = require('./lib/config')
+const { getMainReposFromGit, installRepos } = require('./lib/main-repos')
 
-const config = getConfig();
+const config = getConfig()
 
-getMainReposFromGit(config);
-installRepos(config);
+getMainReposFromGit(config)
+installRepos(config)

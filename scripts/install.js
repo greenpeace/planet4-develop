@@ -1,84 +1,84 @@
-const { existsSync, lstatSync, mkdirSync } = require('fs');
-const { nodeCheck } = require('./lib/node-check');
-const { getConfig } = require('./lib/config');
-const { run } = require('./lib/run');
-const { download } = require('./lib/download');
-const { getMainReposFromGit, installRepos, buildAssets } = require('./lib/main-repos');
-const { generateBaseComposerRequirements } = require('./lib/composer-requirements');
-const { createDatabase, importDatabase, useDatabase } = require('./lib/mysql');
-const { makeDirStructure, cloneIfNotExists } = require('./lib/utils');
+const { existsSync, mkdirSync } = require('fs')
+const { nodeCheck } = require('./lib/node-check')
+const { getConfig } = require('./lib/config')
+const { run } = require('./lib/run')
+const { download } = require('./lib/download')
+const { getMainReposFromGit, installRepos, buildAssets } = require('./lib/main-repos')
+const { generateBaseComposerRequirements } = require('./lib/composer-requirements')
+const { createDatabase, importDatabase, useDatabase } = require('./lib/mysql')
+const { makeDirStructure, cloneIfNotExists } = require('./lib/utils')
 
 /**
  * Node version control
  */
-console.log('Node version: ' + process.version);
-nodeCheck();
+console.log('Node version: ' + process.version)
+nodeCheck()
 
 /**
  * Config
  */
-const config = getConfig();
-console.log(process.cwd(), '\n', config);
+const config = getConfig()
+console.log(process.cwd(), '\n', config)
 
 /**
  * Install main repos
  */
-makeDirStructure(config);
-console.log('Cloning base repo ...');
-cloneIfNotExists(config.baseDir, 'git@github.com:greenpeace/planet4-base.git');
+makeDirStructure(config)
+console.log('Cloning base repo ...')
+cloneIfNotExists(config.baseDir, 'git@github.com:greenpeace/planet4-base.git')
 
-console.log('Cloning and installing main repos ...');
-getMainReposFromGit(config);
-installRepos(config);
+console.log('Cloning and installing main repos ...')
+getMainReposFromGit(config)
+installRepos(config)
 
-console.log('Generating assets ...');
-buildAssets(config);
+console.log('Generating assets ...')
+buildAssets(config)
 
 /**
  * Start WP
  */
-run('wp-env stop');
-run('wp-env start');
+run('wp-env stop')
+run('wp-env start')
 
 /**
  * Merge composer requirements
  */
-console.log('Merging composer requirements ...');
-generateBaseComposerRequirements(config);
+console.log('Merging composer requirements ...')
+generateBaseComposerRequirements(config)
 
 /**
  * Install themes/plugins
  */
-console.log('Installing & activating plugins ...');
-run(`wp-env run composer -d /app/${config.appDir}/ update --ignore-platform-reqs`);
-run('wp-env run cli plugin activate --all');
+console.log('Installing & activating plugins ...')
+run(`wp-env run composer -d /app/${config.appDir}/ update --ignore-platform-reqs`)
+run('wp-env run cli plugin activate --all')
 
 /**
  * Images
  */
-const imagesDump = `planet4-default-content-1-25-images.zip`;
+const imagesDump = 'planet4-default-content-1-25-images.zip'
 download(
   `https://storage.googleapis.com/planet4-default-content/${imagesDump}`,
   `content/${imagesDump}`
-);
-run(`unzip -qo content/${imagesDump} -d ${config.uploadsDir}`);
+)
+run(`unzip -qo content/${imagesDump} -d ${config.uploadsDir}`)
 
 /**
  * Database
  */
-console.log('Importing default database ...');
+console.log('Importing default database ...')
 if (!existsSync('content')) {
-  mkdirSync('content');
+  mkdirSync('content')
 }
-const dbName = 'planet4_dev';
-const dbDump = 'planet4-defaultcontent_wordpress-v0.2.13.sql.gz';
+const dbName = 'planet4_dev'
+const dbDump = 'planet4-defaultcontent_wordpress-v0.2.13.sql.gz'
 download(
   `https://storage.googleapis.com/planet4-default-content/${dbDump}`,
   `content/${dbDump}`
-);
-createDatabase(dbName);
-importDatabase(`content/${dbDump}`, dbName);
-useDatabase(dbName);
-run('wp-env run cli user update admin --user_pass=admin --role=administrator');
+)
+createDatabase(dbName)
+importDatabase(`content/${dbDump}`, dbName)
+useDatabase(dbName)
+run('wp-env run cli user update admin --user_pass=admin --role=administrator')
 
-console.log('Ready !');
+console.log('Ready !')

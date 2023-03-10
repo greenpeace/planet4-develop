@@ -16,6 +16,14 @@
     "build:assets": "node ./scripts/build-assets.js",
     "build:repos": "node ./scripts/build-repos.js",
     "db:import": "node ./scripts/db-import.js",
-    "db:use": "node ./scripts/db-use.js"
+    "db:use": "node ./scripts/db-use.js",
+    "lint": "./node_modules/.bin/eslint"
+  },
+  "devDependencies": {
+    "eslint": "8.35.0",
+    "eslint-config-standard": "17.0.0",
+    "eslint-plugin-import": "2.27.5",
+    "eslint-plugin-n": "15.6.1",
+    "eslint-plugin-promise": "6.1.1"
   }
 }
