@@ -4,3 +4,4 @@ planet4/*
 node_modules/*
 .p4-env.json
 .wp-env.*.json
+junit.xml

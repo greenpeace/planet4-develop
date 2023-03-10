@@ -1,6 +1,7 @@
 
 # Planet 4 development environment
 
+![Last release](https://gitlab.com/lithrel/planet4-develop/-/badges/release.svg?order_by=release_at)
 ![Last pipeline result on main branch](https://gitlab.com/lithrel/planet4-develop/badges/main/pipeline.svg)
 
 _Get a full Planet 4 development environment to your local machine_  
