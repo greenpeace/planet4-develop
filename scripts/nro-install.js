@@ -18,7 +18,7 @@ nodeCheck();
  * Config
  */
 const nroOverride = process.argv[2] || null;
-const config = getConfig(nroOverride);
+const config = getConfig(nroOverride ? {name: nroOverride} : null);
 console.log(process.cwd(), '\n', config);
 if (!config.nro) {
   console.log('Please specify NRO name by using .p4-env.json file');
@@ -28,6 +28,7 @@ if (!config.nro) {
 /**
  * Install main repos
  */
+makeDirStructure(config);
 console.log('Cloning base repo ...');
 cloneIfNotExists(config.baseDir, `git@github.com:greenpeace/planet4-base.git`);
 
@@ -97,6 +98,7 @@ const dumpList = String.fromCharCode(
 ).trim().split(/\r?\n/);
 const dumpUrl = dumpList[dumpList.length - 2].trim().split('  ')[2] || null;
 if (dumpUrl) {
+  console.log(`Dump found: ${dumpUrl}`);
   const dumpName = basename(dumpUrl);
   run(`gsutil cp ${dumpUrl} content/`);
   importDatabase(`content/${dumpName}`, config.nro.db);

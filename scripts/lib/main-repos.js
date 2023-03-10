@@ -1,15 +1,15 @@
 const { renameSync, existsSync, lstatSync } = require('fs');
 const { run } = require('./run');
-const { cloneIfNotExists } = require('./utils');
+const { isRepo, cloneIfNotExists } = require('./utils');
 
 function getMainReposFromGit({themesDir, pluginsDir}) {
   run (`mkdir -p ${themesDir} && mkdir -p ${pluginsDir}`);
 
-  existsSync(`${themesDir}/planet4-master-theme`) && lstatSync(`${themesDir}/planet4-master-theme`).isDirectory()
+  isRepo(`${themesDir}/planet4-master-theme`)
     ? run('git status', {cwd: `${themesDir}/planet4-master-theme`})
     : run(`git clone git@github.com:greenpeace/planet4-master-theme.git ${themesDir}/planet4-master-theme`);
 
-  existsSync(`${pluginsDir}/planet4-plugin-gutenberg-blocks`) && lstatSync(`${pluginsDir}/planet4-plugin-gutenberg-blocks`).isDirectory()
+  isRepo(`${pluginsDir}/planet4-plugin-gutenberg-blocks`)
     ? run('git status', {cwd: `${pluginsDir}/planet4-plugin-gutenberg-blocks`})
     : run(`git clone --recurse-submodules --shallow-submodule git@github.com:greenpeace/planet4-plugin-gutenberg-blocks.git ${pluginsDir}/planet4-plugin-gutenberg-blocks`);
 };

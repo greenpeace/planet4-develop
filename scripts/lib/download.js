@@ -1,4 +1,4 @@
-const { run } = require('./lib/run');
+const { run } = require('./run');
 
 function download(src, dest) {
   run(`curl -L --fail ${src} > ${dest}`);

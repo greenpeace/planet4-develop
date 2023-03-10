@@ -1,6 +1,6 @@
 const { readFileSync } = require('fs');
 
-function getConfig(nro) {
+function getConfig(nroConfig) {
   const wpEnvConfig = JSON.parse(readFileSync('./.wp-env.json'));
   const p4EnvConfig = JSON.parse(readFileSync('./.p4-env.json')) || {};
   const appDir = 'planet4';
@@ -10,23 +10,23 @@ function getConfig(nro) {
       baseDir: `${appDir}/planet4-base`,
       themesDir: wpEnvConfig.mappings['wp-content/themes'],
       pluginsDir: wpEnvConfig.mappings['wp-content/plugins'],
+      uploadsDir: wpEnvConfig.mappings['wp-content/uploads'],
       verbose: process.env.VERBOSE || false,
       ...wpEnvConfig,
-      ...p4EnvConfig,
-      nro: getNroConfig(nro || p4EnvConfig.nro || null, appDir)
+      nro: getNroConfig(nroConfig || p4EnvConfig.nro || null, appDir)
   };
 
   return config;
 }
 
-function getNroConfig(nro, appDir) {
-  return nro ? {
-    name: nro,
-    repo: `planet4-${nro}`,
-    dir: `${appDir}/planet4-${nro}`,
-    db: `planet4_${nro.replace('-', '_')}`,
-    dbBucket: `planet4-${nro}-master-db-backup`,
-    imgBucket: `planet4-${nro}-stateless`,
+function getNroConfig(nroConfig, appDir) {
+  return nroConfig && nroConfig.name ? {
+    repo: `planet4-${nroConfig.name}`,
+    dir: `${appDir}/planet4-${nroConfig.name}`,
+    db: `planet4_${nroConfig.name.replace('-', '_')}`,
+    dbBucket: `planet4-${nroConfig.name}-master-db-backup`,
+    imgBucket: `planet4-${nroConfig.name}-stateless`,
+    ...nroConfig
   } : null;
 }
 

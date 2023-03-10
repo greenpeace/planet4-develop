@@ -6,7 +6,7 @@ const { download } = require('./lib/download');
 const { getMainReposFromGit, installRepos, buildAssets } = require('./lib/main-repos');
 const { generateBaseComposerRequirements } = require('./lib/composer-requirements');
 const { createDatabase, importDatabase, useDatabase } = require('./lib/mysql');
-const { cloneIfNotExists } = require('./utils');
+const { makeDirStructure, cloneIfNotExists } = require('./lib/utils');
 
 /**
  * Node version control
@@ -23,6 +23,7 @@ console.log(process.cwd(), '\n', config);
 /**
  * Install main repos
  */
+makeDirStructure(config);
 console.log('Cloning base repo ...');
 cloneIfNotExists(config.baseDir, 'git@github.com:greenpeace/planet4-base.git');
 
@@ -51,6 +52,16 @@ generateBaseComposerRequirements(config);
 console.log('Installing & activating plugins ...');
 run(`wp-env run composer -d /app/${config.appDir}/ update --ignore-platform-reqs`);
 run('wp-env run cli plugin activate --all');
+
+/**
+ * Images
+ */
+const imagesDump = `planet4-default-content-1-25-images.zip`;
+download(
+  `https://storage.googleapis.com/planet4-default-content/${imagesDump}`,
+  `content/${imagesDump}`
+);
+run(`unzip -qo content/${imagesDump} -d ${config.uploadsDir}`);
 
 /**
  * Database

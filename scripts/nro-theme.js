@@ -14,7 +14,7 @@ nodeCheck();
  * Config
  */
 const nroOverride = process.argv[2] || null;
-const config = getConfig(nroOverride);
+const config = getConfig(nroOverride ? {name: nroOverride} : null);
 console.log(process.cwd(), '\n', config);
 if (!config.nro) {
   console.log('Please specify NRO name by using .p4-env.json file');

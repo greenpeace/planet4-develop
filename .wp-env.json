@@ -3,7 +3,8 @@
   "core": "WordPress/WordPress#6.1.1",
   "mappings": {
     "wp-content/themes": "./planet4/themes",
-    "wp-content/plugins": "./planet4/plugins"
+    "wp-content/plugins": "./planet4/plugins",
+    "wp-content/uploads": "./planet4/uploads"
   },
   "config": {
     "KEY_1": true,
