@@ -7,11 +7,21 @@ default:
 
 stages:
   - lint
+  - test
 
 lint-job:
   stage: lint
   script:
-    - echo "Linting the code..."
     - npm run lint -- scripts
-    - echo "Linting complete."
+  timeout: 5m
+
+test-job:
+  stage: test
+  script:
+    - npm test
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - junit.xml
   timeout: 5m

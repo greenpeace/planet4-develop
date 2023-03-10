@@ -1,8 +1,10 @@
-const { readFileSync } = require('fs')
+const { readFileSync, existsSync } = require('fs')
 
-function getConfig (nroConfig) {
+function getConfig (override) {
   const wpEnvConfig = JSON.parse(readFileSync('./.wp-env.json'))
-  const p4EnvConfig = JSON.parse(readFileSync('./.p4-env.json')) || {}
+  const p4EnvConfig = existsSync('./.p4-env.json')
+    ? JSON.parse(readFileSync('./.p4-env.json')) || {}
+    : {}
   const appDir = 'planet4'
 
   const config = {
@@ -13,7 +15,8 @@ function getConfig (nroConfig) {
     uploadsDir: wpEnvConfig.mappings['wp-content/uploads'],
     verbose: process.env.VERBOSE || false,
     ...wpEnvConfig,
-    nro: getNroConfig(nroConfig || p4EnvConfig.nro || null, appDir)
+    ...override,
+    nro: getNroConfig(override.nro || p4EnvConfig.nro || null, appDir)
   }
 
   return config
