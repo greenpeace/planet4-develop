@@ -1,7 +1,13 @@
 
+# Planet 4 development environment
+
 ![Last pipeline result on main branch](https://gitlab.com/lithrel/planet4-develop/badges/main/pipeline.svg)
 
-# Requirements
+_Get a full Planet 4 development environment to your local machine_  
+We are using [`wp-env`](https://github.com/WordPress/gutenberg/blob/trunk/packages/env/README.md) as a base and pulling all necessary themes and plugins so that you can develop for your website more easily.
+
+
+## System Requirements
 
 - docker, docker-compose
   - https://docs.docker.com/get-docker/
@@ -14,7 +20,7 @@
 - _optional: gsutil CLI_
   - https://cloud.google.com/storage/docs/gsutil_install
 
-# Before anything
+## Before anything
 
 - Clone this repo
 - Set node version
@@ -22,19 +28,19 @@
 > nvm use
 ```
 
-# Installation
+## Installation
 
 ```console
 > npm run env:install
 ```
 
-# Clean up
+## Clean up
 
 ```console
 > npm run env:clean
 ```
 
-# All commands
+## All commands
 ```
 npm run
 - env:install                       Install default Planet 4 theme and database
@@ -52,31 +58,31 @@ npm run
 - db:use <db name>                  Switch to database
 ```
 
-# Resources
+## Resources
 
 - https://github.com/WordPress/developer-blog-content/issues/89
 
-# To do
+## To do
 
-## Perfs
+### Perfs
 - Add Redis server to check if instance is faster that way
 
-## Permissions
+### Permissions
 - check why everything is root (missing user with UID used by wp-env ?)
   - https://github.com/WordPress/gutenberg/issues/28201 maybe
 
-## NRO
+### NRO
 - Full dev install
   - Fetch DB, import and switch
 
-## Team
+### Team
 - Pull & activate child-theme individually
 
-## Images
+### Images
 - dl default content
 - reverse proxy
   - similar to nginx, but for Apache2
 
-## Rewrite rules
+### Rewrite rules
 - adapt to Apache2
 - make it work for wpml urls
