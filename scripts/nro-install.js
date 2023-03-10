@@ -4,7 +4,7 @@ const { getConfig } = require('./lib/config');
 const { run } = require('./lib/run');
 const { getMainReposFromRelease, installRepos } = require('./lib/main-repos');
 const { generateBaseComposerRequirements, generateNROComposerRequirements } = require('./lib/composer-requirements');
-const { cloneIfNotExists } = require('./lib/utils');
+const { makeDirStructure, cloneIfNotExists } = require('./lib/utils');
 const { createDatabase, importDatabase, databaseExists, useDatabase } = require('./lib/mysql');
 const { basename } = require('path');
 
