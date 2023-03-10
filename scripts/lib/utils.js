@@ -28,14 +28,15 @@ function makeDirStructure ({ themesDir, pluginsDir, uploadsDir }) {
 }
 
 function installPluginsDependencies ({ pluginsDir }) {
+  const excluded = ['cmb2']
   const files = readdirSync(pluginsDir)
 
   files.forEach((file) => {
     const path = `${pluginsDir}/${file}`
-    if (!isDir(path) ||
-      !existsSync(`${path}/composer.json`) ||
-      isDir(`${path}/vendor`) ||
-      file === 'cmb2'
+    if (excluded.includes(file)
+      || !isDir(path)
+      || !existsSync(`${path}/composer.json`)
+      || isDir(`${path}/vendor`)
     ) {
       return
     }

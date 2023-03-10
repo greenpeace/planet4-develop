@@ -57,7 +57,7 @@ run('wp-env run cli plugin activate --all')
 /**
  * Images
  */
-const imagesDump = 'planet4-default-content-1-25-images.zip'
+const imagesDump = `planet4-default-content-${config.planet4.content.images}-images.zip`
 download(
   `https://storage.googleapis.com/planet4-default-content/${imagesDump}`,
   `content/${imagesDump}`
@@ -72,7 +72,7 @@ if (!existsSync('content')) {
   mkdirSync('content')
 }
 const dbName = 'planet4_dev'
-const dbDump = 'planet4-defaultcontent_wordpress-v0.2.13.sql.gz'
+const dbDump = `planet4-defaultcontent_wordpress-${config.planet4.content.db}.sql.gz`
 download(
   `https://storage.googleapis.com/planet4-default-content/${dbDump}`,
   `content/${dbDump}`

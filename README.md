@@ -48,6 +48,7 @@ npm run
 - env:config                        Show generated configuration
 - env:fix-permissions [all]         Fix files permissions to current user as owner
 - env:clean-repos                   Remove main repos if they are not git repositories
+- env:update                        Update installer, base and main repos
 - nro:install <?nro>                Install NRO theme and database, if declared in .p4-env.json
 - nro:enable                        Enable installed NRO theme and database
 - nro:disable                       Switch back to default theme and database

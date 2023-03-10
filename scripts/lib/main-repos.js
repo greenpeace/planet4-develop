@@ -1,22 +1,32 @@
 const { run } = require('./run')
 const { isDir, isRepo } = require('./utils')
 
-function getMainReposFromGit ({ themesDir, pluginsDir }) {
+function getMainReposFromGit ({ themesDir, pluginsDir, planet4 }) {
   run(`mkdir -p ${themesDir} && mkdir -p ${pluginsDir}`)
 
   isRepo(`${themesDir}/planet4-master-theme`)
     ? run('git status', { cwd: `${themesDir}/planet4-master-theme` })
     : run(`git clone git@github.com:greenpeace/planet4-master-theme.git ${themesDir}/planet4-master-theme`)
 
+  run(
+    `git checkout ${planet4.repos['planet4-master-theme'] || 'main'} || true`,
+    { cwd: `${themesDir}/planet4-master-theme` }
+  )
+
   isRepo(`${pluginsDir}/planet4-plugin-gutenberg-blocks`)
     ? run('git status', { cwd: `${pluginsDir}/planet4-plugin-gutenberg-blocks` })
     : run(`git clone --recurse-submodules --shallow-submodule git@github.com:greenpeace/planet4-plugin-gutenberg-blocks.git ${pluginsDir}/planet4-plugin-gutenberg-blocks`)
+
+  run(
+    `git checkout ${planet4.repos['planet4-plugin-gutenberg-blocks'] || 'main'} || true`,
+    { cwd: `${pluginsDir}/planet4-plugin-gutenberg-blocks` }
+  )
 };
 
 function getMainReposFromRelease (config, force = false) {
-  if (!force &&
-    isDir(`${config.themesDir}/planet4-master-theme`) &&
-    isDir(`${config.pluginsDir}/planet4-plugin-gutenberg-blocks`)
+  if (!force
+    && isDir(`${config.themesDir}/planet4-master-theme`)
+    && isDir(`${config.pluginsDir}/planet4-plugin-gutenberg-blocks`)
   ) {
     return
   }
@@ -47,9 +57,9 @@ function installNpmDependencies (config) {
 }
 
 function buildAssets (config, force = false) {
-  if (!force &&
-    isDir(`${config.themesDir}/planet4-master-theme/assets/build`) &&
-    isDir(`${config.pluginsDir}/planet4-plugin-gutenberg-blocks/assets/build`)
+  if (!force
+    && isDir(`${config.themesDir}/planet4-master-theme/assets/build`)
+    && isDir(`${config.pluginsDir}/planet4-plugin-gutenberg-blocks/assets/build`)
   ) {
     return
   }
