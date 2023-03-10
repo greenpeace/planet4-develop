@@ -1,0 +1,16 @@
+default:
+  image: node:14
+
+  before_script:
+    - export NODE_ENV=development
+    - npm install
+
+stages:
+  - lint
+
+lint-job:
+  stage: lint
+  script:
+    - echo "Linting the code..."
+    - npm run lint -- scripts
+    - echo "Linting complete."
