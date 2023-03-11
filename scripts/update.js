@@ -16,20 +16,20 @@ nodeCheck()
 const config = getConfig()
 console.log(process.cwd(), '\n', config)
 
-// self ? and rerun
-// base dir
-// main repos
-// default DB
-// default images
-
+// self - and rerun ?
 if (isRepo(process.cwd())) {
   run('git pull || true', { cwd: `${process.cwd()}` })
+} else {
+  // download release
 }
 
+// base dir
+// reinstall dependencies ?
 if (isRepo(config.baseDir)) {
   run('git pull || true', { cwd: `${config.baseDir}` })
 }
 
+// main repos
 if (isRepo(`${config.themesDir}/planet4-master-theme`)
   && isRepo(`${config.pluginsDir}/planet4-plugin-gutenberg-blocks`)
 ) {
@@ -42,3 +42,6 @@ if (isRepo(`${config.themesDir}/planet4-master-theme`)
   getMainReposFromRelease(config, true)
   installRepos(config)
 }
+
+// default images
+// default DB

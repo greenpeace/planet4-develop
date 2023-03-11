@@ -6,7 +6,7 @@ function getMainReposFromGit ({ themesDir, pluginsDir, planet4 }) {
 
   isRepo(`${themesDir}/planet4-master-theme`)
     ? run('git status', { cwd: `${themesDir}/planet4-master-theme` })
-    : run(`git clone git@github.com:greenpeace/planet4-master-theme.git ${themesDir}/planet4-master-theme`)
+    : run(`git clone https://github.com/greenpeace/planet4-master-theme.git ${themesDir}/planet4-master-theme`)
 
   run(
     `git checkout ${planet4.repos['planet4-master-theme'] || 'main'} || true`,
@@ -15,7 +15,7 @@ function getMainReposFromGit ({ themesDir, pluginsDir, planet4 }) {
 
   isRepo(`${pluginsDir}/planet4-plugin-gutenberg-blocks`)
     ? run('git status', { cwd: `${pluginsDir}/planet4-plugin-gutenberg-blocks` })
-    : run(`git clone --recurse-submodules --shallow-submodule git@github.com:greenpeace/planet4-plugin-gutenberg-blocks.git ${pluginsDir}/planet4-plugin-gutenberg-blocks`)
+    : run(`git clone --recurse-submodules --shallow-submodule https://github.com/greenpeace/planet4-plugin-gutenberg-blocks.git ${pluginsDir}/planet4-plugin-gutenberg-blocks`)
 
   run(
     `git checkout ${planet4.repos['planet4-plugin-gutenberg-blocks'] || 'main'} || true`,

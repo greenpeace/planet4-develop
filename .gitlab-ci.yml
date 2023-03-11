@@ -8,6 +8,7 @@ default:
 stages:
   - lint
   - test
+  - build
 
 lint-job:
   stage: lint
@@ -25,3 +26,14 @@ test-job:
       junit:
         - junit.xml
   timeout: 5m
+
+build-job:
+  stage: build
+  script:
+    - npm -g i @wordpress/env
+    - npm run build:release
+    - cd ../
+    - tar --exclude='planet4/vendor' -zcf planet4-develop-release-$CI_COMMIT_REF_SLUG.gz planet4-develop
+  artifacts:
+    paths:
+      - planet4-develop-release$CI_COMMIT_REF_SLUG.gz

@@ -24,7 +24,7 @@ if (!config.nro) {
  * Clone NRO deployment repo
  */
 console.log('Cloning deployment repo ...')
-cloneIfNotExists(config.nro.dir, `git@github.com:greenpeace/${config.nro.repo}.git`)
+cloneIfNotExists(config.nro.dir, `https://github.com/greenpeace/${config.nro.repo}.git`)
 const composerConfig = getNroComposerRequirements(config)
 const keys = Object.keys(composerConfig.require || {}).filter(k => k.startsWith('greenpeace/planet4-child-theme-'))
 const theme = keys[0] || null
@@ -36,5 +36,5 @@ let themeName = null
 if (theme) {
   themeName = theme.replace('greenpeace/', '')
   const themePath = `${config.themesDir}/${themeName}`
-  cloneIfNotExists(themePath, `git@github.com:${theme}.git`)
+  cloneIfNotExists(themePath, `https://github.com/${theme}.git`)
 }

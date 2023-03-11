@@ -30,7 +30,7 @@ if (!config.nro) {
  */
 makeDirStructure(config)
 console.log('Cloning base repo ...')
-cloneIfNotExists(config.baseDir, 'git@github.com:greenpeace/planet4-base.git')
+cloneIfNotExists(config.baseDir, 'https://github.com/greenpeace/planet4-base.git')
 
 console.log('Fetching main repos ...')
 getMainReposFromRelease(config)
@@ -40,7 +40,7 @@ installRepos(config)
  * Clone NRO deployment repo
  */
 console.log('Cloning deployment repo ...')
-cloneIfNotExists(config.nro.dir, `git@github.com:greenpeace/${config.nro.repo}.git`)
+cloneIfNotExists(config.nro.dir, `https://github.com/greenpeace/${config.nro.repo}.git`)
 
 /**
  * Start WP
@@ -69,7 +69,7 @@ let themeName = null
 if (theme) {
   themeName = theme.replace('greenpeace/', '')
   const themePath = `${config.themesDir}/${themeName}`
-  cloneIfNotExists(themePath, `git@github.com:${theme}.git`)
+  cloneIfNotExists(themePath, `https://github.com/${theme}.git`)
   run(`wp-env run composer -d /app/${config.appDir}/ remove --no-update ${theme}`)
 
   if (existsSync(`${themePath}/composer.json`)) {

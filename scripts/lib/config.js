@@ -16,7 +16,7 @@ function getConfig (override) {
     verbose: process.env.VERBOSE || false,
     ...wpEnvConfig,
     ...override,
-    nro: getNroConfig(override.nro || p4EnvConfig.nro || null, appDir)
+    nro: getNroConfig(override?.nro || p4EnvConfig?.nro || null, appDir)
   }
 
   return config

@@ -28,7 +28,7 @@ let themeName = null
 if (theme) {
   themeName = theme.replace('greenpeace/', '')
   const themePath = `${config.themesDir}/${themeName}`
-  cloneIfNotExists(themePath, `git@github.com:${theme}.git`)
+  cloneIfNotExists(themePath, `https://github.com/${theme}.git`)
   run(`wp-env run composer -d /app/${config.appDir}/ remove --no-update ${theme}`)
 }
 
