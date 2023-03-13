@@ -3,7 +3,7 @@ const { getConfig } = require('./lib/config')
 const { run } = require('./lib/run')
 const { getMainReposFromRelease, installRepos } = require('./lib/main-repos')
 const { generateBaseComposerRequirements, generateNROComposerRequirements } = require('./lib/composer-requirements')
-const { makeDirStructure, cloneIfNotExists, installPluginsDependencies } = require('./lib/utils')
+const { createHtaccess, makeDirStructure, cloneIfNotExists, installPluginsDependencies } = require('./lib/utils')
 const { createDatabase, importDatabase, databaseExists, useDatabase } = require('./lib/mysql')
 const { basename } = require('path')
 const { existsSync } = require('fs')
@@ -26,9 +26,16 @@ if (!config.nro) {
 }
 
 /**
- * Install main repos
+ * Start WP
  */
 makeDirStructure(config)
+run('wp-env stop || true')
+run('wp-env start')
+createHtaccess(config)
+
+/**
+ * Install main repos
+ */
 console.log('Cloning base repo ...')
 cloneIfNotExists(config.baseDir, 'https://github.com/greenpeace/planet4-base.git')
 
@@ -41,12 +48,6 @@ installRepos(config)
  */
 console.log('Cloning deployment repo ...')
 cloneIfNotExists(config.nro.dir, `https://github.com/greenpeace/${config.nro.repo}.git`)
-
-/**
- * Start WP
- */
-run('wp-env stop')
-run('wp-env start')
 
 /**
  * Merge base composer requirements

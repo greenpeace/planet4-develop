@@ -24,7 +24,7 @@ function cloneIfNotExists (path, repo) {
 }
 
 function makeDirStructure ({ themesDir, pluginsDir, uploadsDir }) {
-  run(`mkdir -p ${themesDir} && mkdir -p ${pluginsDir} && mkdir -p ${uploadsDir}`)
+  run(`mkdir -p ${themesDir} && mkdir -p ${pluginsDir} && mkdir -p ${uploadsDir} && mkdir -p content`)
 }
 
 function installPluginsDependencies ({ pluginsDir }) {
@@ -45,10 +45,15 @@ function installPluginsDependencies ({ pluginsDir }) {
   })
 }
 
+function createHtaccess (config) {
+  run('docker compose -f $(wp-env install-path)/docker-compose.yml cp scripts/.htaccess wordpress:/var/www/html/.htaccess')
+}
+
 module.exports = {
   isDir,
   isRepo,
   cloneIfNotExists,
   makeDirStructure,
-  installPluginsDependencies
+  installPluginsDependencies,
+  createHtaccess
 }

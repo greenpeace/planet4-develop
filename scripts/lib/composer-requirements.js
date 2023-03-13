@@ -18,6 +18,8 @@ function generateBaseComposerRequirements (config) {
     run(`wp-env run composer -d /app/${config.appDir}/ remove --no-update greenpeace/planet4-plugin-gutenberg-blocks`)
   }
 
+  run(`wp-env run composer -d /app/${config.appDir}/ remove --no-update greenpeace/planet4-nginx-helper`)
+
   return JSON.parse(readFileSync(`${config.appDir}/composer.json`))
 }
 

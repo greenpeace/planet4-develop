@@ -6,7 +6,7 @@ const { download } = require('./lib/download')
 const { getMainReposFromGit, installRepos, buildAssets } = require('./lib/main-repos')
 const { generateBaseComposerRequirements } = require('./lib/composer-requirements')
 const { createDatabase, importDatabase, useDatabase } = require('./lib/mysql')
-const { makeDirStructure, cloneIfNotExists, installPluginsDependencies } = require('./lib/utils')
+const { createHtaccess, makeDirStructure, cloneIfNotExists, installPluginsDependencies } = require('./lib/utils')
 
 /**
  * Node version control
@@ -21,9 +21,16 @@ const config = getConfig()
 console.log(process.cwd(), '\n', config)
 
 /**
- * Install main repos
+ * Start WP
  */
 makeDirStructure(config)
+run('wp-env stop || true')
+run('wp-env start')
+createHtaccess(config)
+
+/**
+ * Install main repos
+ */
 console.log('Cloning base repo ...')
 cloneIfNotExists(config.baseDir, 'https://github.com/greenpeace/planet4-base.git')
 
@@ -33,12 +40,6 @@ installRepos(config)
 
 console.log('Generating assets ...')
 buildAssets(config)
-
-/**
- * Start WP
- */
-run('wp-env stop')
-run('wp-env start')
 
 /**
  * Merge composer requirements
