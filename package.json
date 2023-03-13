@@ -17,7 +17,6 @@
     "nro:theme": "node ./scripts/nro-theme.js",
     "build:assets": "node ./scripts/build-assets.js",
     "build:repos": "node ./scripts/build-repos.js",
-    "build:release": "node ./scripts/build-release.js",
     "db:import": "node ./scripts/db-import.js",
     "db:use": "node ./scripts/db-use.js",
     "lint": "eslint",
