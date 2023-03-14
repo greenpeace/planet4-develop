@@ -45,11 +45,12 @@ We are using [`wp-env`](https://github.com/WordPress/gutenberg/blob/trunk/packag
 ```
 npm run
 - env:install                       Install default Planet 4 theme and database
-- env:clean                         Clean containers and delete all Planet 4 files
+- env:clean                         Clean wp-env and delete all Planet 4 files
 - env:config                        Show generated configuration
 - env:fix-permissions [all]         Fix files permissions to current user as owner
 - env:clean-repos                   Remove main repos if they are not git repositories
 - env:update                        Update installer, base and main repos
+- env:status                        Status of docker containers
 - nro:install <?nro>                Install NRO theme and database, if declared in .p4-env.json
 - nro:enable                        Enable installed NRO theme and database
 - nro:disable                       Switch back to default theme and database
@@ -62,6 +63,7 @@ npm run
 
 ## Resources
 
+- https://github.com/WordPress/gutenberg/tree/trunk/packages/env
 - https://github.com/WordPress/developer-blog-content/issues/89
 
 ## To do
@@ -73,18 +75,16 @@ npm run
 - check why everything is root (missing user with UID used by wp-env ?)
   - https://github.com/WordPress/gutenberg/issues/28201 maybe
 
-### NRO
-- Full dev install
-  - Fetch DB, import and switch
-
-### Team
-- Pull & activate child-theme individually
+### Composer
+- execute @site:custom scripts
+  - figure out replacement of `wp` commands 
 
 ### Images
-- dl default content
 - reverse proxy
   - similar to nginx, but for Apache2
 
 ### Rewrite rules
 - adapt to Apache2
-- make it work for wpml urls
+
+### WPML
+- String Translation issues writing in languages folder

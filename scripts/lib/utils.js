@@ -23,8 +23,8 @@ function cloneIfNotExists (path, repo) {
   run(`git clone ${repo} ${path}`)
 }
 
-function makeDirStructure ({ themesDir, pluginsDir, uploadsDir }) {
-  run(`mkdir -p ${themesDir} && mkdir -p ${pluginsDir} && mkdir -p ${uploadsDir} && mkdir -p content`)
+function makeDirStructure ({ themesDir, pluginsDir, uploadsDir, languagesDir }) {
+  run(`mkdir -p ${themesDir} && mkdir -p ${pluginsDir} && mkdir -p ${uploadsDir} && mkdir -p ${languagesDir} && mkdir -p content`)
 }
 
 function installPluginsDependencies ({ pluginsDir }) {

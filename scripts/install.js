@@ -53,7 +53,6 @@ generateBaseComposerRequirements(config)
 console.log('Installing & activating plugins ...')
 run(`wp-env run composer -d /app/${config.appDir}/ update --ignore-platform-reqs`)
 installPluginsDependencies(config)
-run('wp-env run cli plugin activate --all')
 
 /**
  * Images
@@ -81,6 +80,7 @@ download(
 createDatabase(dbName)
 importDatabase(`content/${dbDump}`, dbName)
 useDatabase(dbName)
+run('wp-env run cli plugin activate --all')
 run('wp-env run cli user update admin --user_pass=admin --role=administrator')
 
 console.log('Ready !')

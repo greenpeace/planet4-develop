@@ -4,7 +4,8 @@
   "mappings": {
     "wp-content/themes": "./planet4/themes",
     "wp-content/plugins": "./planet4/plugins",
-    "wp-content/uploads": "./planet4/uploads"
+    "wp-content/uploads": "./planet4/uploads",
+    "wp-content/languages": "./planet4/languages"
   },
   "config": {
     "KEY_1": true,

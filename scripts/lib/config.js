@@ -13,6 +13,7 @@ function getConfig (override) {
     themesDir: wpEnvConfig.mappings['wp-content/themes'],
     pluginsDir: wpEnvConfig.mappings['wp-content/plugins'],
     uploadsDir: wpEnvConfig.mappings['wp-content/uploads'],
+    languagesDir: wpEnvConfig.mappings['wp-content/languages'],
     verbose: process.env.VERBOSE || false,
     ...wpEnvConfig,
     ...override,
