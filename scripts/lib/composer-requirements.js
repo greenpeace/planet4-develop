@@ -20,7 +20,20 @@ function generateBaseComposerRequirements (config) {
 
   run(`wp-env run composer -d /app/${config.appDir}/ remove --no-update greenpeace/planet4-nginx-helper`)
 
-  return JSON.parse(readFileSync(`${config.appDir}/composer.json`))
+  const baseComposerConfig = JSON.parse(readFileSync(`${config.appDir}/composer.json`))
+  if (baseComposerConfig?.repositories) {
+    for (const k in baseComposerConfig.repositories) {
+      if (baseComposerConfig.repositories[k]?.type !== 'package'
+        || !baseComposerConfig.repositories[k]?.package.name.startsWith('plugins/')
+      ) {
+        continue
+      }
+      baseComposerConfig.repositories[k].package.type = 'wordpress-plugin'
+    }
+  }
+
+  writeFileSync(`${config.appDir}/composer.json`, JSON.stringify(baseComposerConfig, null, '  '))
+  return baseComposerConfig
 }
 
 function generateNROComposerRequirements (config) {
@@ -34,8 +47,7 @@ function generateNROComposerRequirements (config) {
   }
   const composerConfig = { ...baseComposerConfig, ...merged }
   // @todo: resolve composer scripts and/or `wp` usage from composer container
-  writeFileSync(`${config.appDir}/composer.json`, JSON.stringify(composerConfig))
-
+  writeFileSync(`${config.appDir}/composer.json`, JSON.stringify(composerConfig, null, '  '))
   return composerConfig
 }
 
