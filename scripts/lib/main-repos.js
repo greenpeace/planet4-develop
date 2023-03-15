@@ -1,9 +1,16 @@
 const { run } = require('./run')
-const { isDir, isRepo } = require('./utils')
+const { isDir, isRepo, cloneIfNotExists } = require('./utils')
+
+function getBaseRepoFromGit ({ baseDir, planet4 }) {
+  cloneIfNotExists(baseDir, 'https://github.com/greenpeace/planet4-base.git')
+
+  run(
+    `git checkout ${planet4.repos['planet4-base'] || 'main'} || true`,
+    { cwd: `${baseDir}` }
+  )
+}
 
 function getMainReposFromGit ({ themesDir, pluginsDir, planet4 }) {
-  run(`mkdir -p ${themesDir} && mkdir -p ${pluginsDir}`)
-
   isRepo(`${themesDir}/planet4-master-theme`)
     ? run('git status', { cwd: `${themesDir}/planet4-master-theme` })
     : run(`git clone https://github.com/greenpeace/planet4-master-theme.git ${themesDir}/planet4-master-theme`)
@@ -70,6 +77,7 @@ function buildAssets (config, force = false) {
 }
 
 module.exports = {
+  getBaseRepoFromGit,
   getMainReposFromGit,
   getMainReposFromRelease,
   buildAssets,

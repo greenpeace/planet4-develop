@@ -1,8 +1,7 @@
 
 # Planet 4 development environment
 
-![Last release](https://gitlab.com/lithrel/planet4-develop/-/badges/release.svg?order_by=release_at)
-![Last pipeline result on main branch](https://gitlab.com/lithrel/planet4-develop/badges/main/pipeline.svg)
+![Last pipeline result on main branch](https://circleci.com/gh/greenpeace/planet4-develop.svg?style=shield)
 
 _Get a full Planet 4 development environment to your local machine_  
 We are using [`wp-env`](https://github.com/WordPress/gutenberg/blob/trunk/packages/env/README.md) as a base and pulling all necessary themes and plugins so that you can develop for your website more easily.
@@ -60,6 +59,15 @@ npm run
 - db:import <dump path> <db name>   Import database dump (gzip)
 - db:use <db name>                  Switch to database
 ```
+
+## Workflow
+
+- themes are installed in `planet4/themes`
+  - the theme is usually cloned by the installer and should be modifiable right away
+  - you can add or create any theme in this folder, it will be available in your local instance
+- plugins are installed in `planet4/plugins`
+  - if a plugin you want to work on is not writable, either use `npm run env:fix-permissions`, or remove it and clone your own repo to replace it
+  - you can add or create any theme in this folder, it will be available in your local instance
 
 ## Resources
 

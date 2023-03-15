@@ -1,0 +1,45 @@
+---
+version: 2.1
+
+jobs:
+  lint:
+    docker:
+      - image: node:14
+    environment:
+      - NODE_ENV: "development"
+    steps:
+      - checkout
+      - run:
+          name: Lint
+          command: |
+            npm install
+            npm run lint -- scripts
+
+  test:
+    docker:
+      - image: node:14
+    environment:
+      - NODE_ENV: "development"
+    steps:
+      - checkout
+      - run:
+          name: Test
+          command: |
+            npm install
+            npm test
+      - run:
+          name: Extract tests artifacts
+          when: always
+          command: |
+            mkdir -p /tmp/artifacts/
+            cp -r junit.xml /tmp/artifacts || true
+      - store_test_results:
+          path: /tmp/artifacts
+      - store_artifacts:
+          path: /tmp/artifacts
+
+workflows:
+  main:
+    jobs:
+      - lint
+      - test

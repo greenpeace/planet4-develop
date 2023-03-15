@@ -1,7 +1,7 @@
 const { nodeCheck } = require('./lib/node-check')
 const { getConfig } = require('./lib/config')
 const { run } = require('./lib/run')
-const { getMainReposFromRelease, installRepos } = require('./lib/main-repos')
+const { getBaseRepoFromGit, getMainReposFromRelease, installRepos } = require('./lib/main-repos')
 const { generateBaseComposerRequirements, generateNROComposerRequirements } = require('./lib/composer-requirements')
 const { createHtaccess, makeDirStructure, cloneIfNotExists, installPluginsDependencies } = require('./lib/utils')
 const { createDatabase, importDatabase, databaseExists, useDatabase } = require('./lib/mysql')
@@ -37,7 +37,7 @@ createHtaccess(config)
  * Install main repos
  */
 console.log('Cloning base repo ...')
-cloneIfNotExists(config.baseDir, 'https://github.com/greenpeace/planet4-base.git')
+getBaseRepoFromGit(config)
 
 console.log('Fetching main repos ...')
 getMainReposFromRelease(config)

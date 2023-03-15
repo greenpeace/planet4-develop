@@ -3,10 +3,10 @@ const { nodeCheck } = require('./lib/node-check')
 const { getConfig } = require('./lib/config')
 const { run } = require('./lib/run')
 const { download } = require('./lib/download')
-const { getMainReposFromGit, installRepos, buildAssets } = require('./lib/main-repos')
+const { getBaseRepoFromGit, getMainReposFromGit, installRepos, buildAssets } = require('./lib/main-repos')
 const { generateBaseComposerRequirements } = require('./lib/composer-requirements')
 const { createDatabase, importDatabase, useDatabase } = require('./lib/mysql')
-const { createHtaccess, makeDirStructure, cloneIfNotExists, installPluginsDependencies } = require('./lib/utils')
+const { createHtaccess, makeDirStructure, installPluginsDependencies } = require('./lib/utils')
 
 /**
  * Node version control
@@ -32,7 +32,7 @@ createHtaccess(config)
  * Install main repos
  */
 console.log('Cloning base repo ...')
-cloneIfNotExists(config.baseDir, 'https://github.com/greenpeace/planet4-base.git')
+getBaseRepoFromGit(config)
 
 console.log('Cloning and installing main repos ...')
 getMainReposFromGit(config)
