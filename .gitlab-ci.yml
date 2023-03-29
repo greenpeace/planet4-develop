@@ -1,5 +1,5 @@
 default:
-  image: node:14
+  image: node:16
 
   before_script:
     - export NODE_ENV=development

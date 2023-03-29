@@ -4,7 +4,7 @@ version: 2.1
 jobs:
   lint:
     docker:
-      - image: node:14
+      - image: node:16
     environment:
       - NODE_ENV: "development"
     steps:
@@ -17,7 +17,7 @@ jobs:
 
   test:
     docker:
-      - image: node:14
+      - image: node:16
     environment:
       - NODE_ENV: "development"
     steps:
