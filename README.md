@@ -9,8 +9,9 @@ We are using [`wp-env`](https://github.com/WordPress/gutenberg/blob/trunk/packag
 
 ## System Requirements
 
-- docker, docker-compose
+- docker, docker compose
   - https://docs.docker.com/get-docker/
+  - https://docs.docker.com/compose/reference/
 - node, npm, nvm
   - https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
   - https://github.com/nvm-sh/nvm
