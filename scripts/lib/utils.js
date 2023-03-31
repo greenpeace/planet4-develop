@@ -46,7 +46,7 @@ function installPluginsDependencies ({ pluginsDir }) {
 }
 
 function createHtaccess (config) {
-  run('docker compose -f $(wp-env install-path)/docker-compose.yml cp scripts/.htaccess wordpress:/var/www/html/.htaccess')
+  run('docker-compose -f $(wp-env install-path)/docker-compose.yml cp scripts/.htaccess wordpress:/var/www/html/.htaccess')
 }
 
 module.exports = {
