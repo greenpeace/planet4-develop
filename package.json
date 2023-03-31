@@ -11,6 +11,8 @@
     "env:clean-repos": "node ./scripts/clean-repos.js",
     "env:update": "node ./scripts/update.js",
     "env:status": "docker compose -f $(wp-env install-path)/docker-compose.yml ps --all",
+    "env:start": "wp-env start",
+    "env:stop": "wp-env stop",
     "nro:install": "node ./scripts/nro-install.js",
     "nro:enable": "node ./scripts/nro-enable.js",
     "nro:disable": "node ./scripts/nro-disable.js",
