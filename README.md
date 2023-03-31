@@ -9,8 +9,9 @@ We are using [`wp-env`](https://github.com/WordPress/gutenberg/blob/trunk/packag
 
 ## System Requirements
 
-- docker, docker-compose
+- docker, docker compose
   - https://docs.docker.com/get-docker/
+  - https://docs.docker.com/compose/reference/
 - node, npm, nvm
   - https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
   - https://github.com/nvm-sh/nvm
@@ -30,6 +31,12 @@ We are using [`wp-env`](https://github.com/WordPress/gutenberg/blob/trunk/packag
 
 ## Installation
 
+Check the requirements with: 
+```console
+> npm run env:requirements
+```
+
+Install with: 
 ```console
 > npm run env:install
 ```
@@ -43,7 +50,10 @@ We are using [`wp-env`](https://github.com/WordPress/gutenberg/blob/trunk/packag
 ## All commands
 ```
 npm run
+- env:requirements                  Check requirements
 - env:install                       Install default Planet 4 theme and database
+- env:start                         Start the environment
+- env:stop                          Stop the environment
 - env:clean                         Clean wp-env and delete all Planet 4 files
 - env:config                        Show generated configuration
 - env:fix-permissions [all]         Fix files permissions to current user as owner
