@@ -23,6 +23,10 @@
     "build:repos": "node ./scripts/build-repos.js",
     "db:import": "node ./scripts/db-import.js",
     "db:use": "node ./scripts/db-use.js",
+    "elastic:activate": "node ./scripts/elastic.js activate",
+    "elastic:deactivate": "node ./scripts/elastic.js deactivate",
+    "shell:php": "node ./scripts/shell.js php",
+    "shell:mysql": "node ./scripts/shell.js mysql",
     "lint": "eslint",
     "test": "mocha --reporter mocha-junit-reporter --reporter-options mochaFile=junit.xml"
   },
