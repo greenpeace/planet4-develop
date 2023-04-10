@@ -1,6 +1,9 @@
 ---
 version: 2.1
 
+orbs:
+  slack: circleci/slack@3.4.2
+
 jobs:
   lint:
     docker:
@@ -20,6 +23,10 @@ jobs:
       - image: node:16
     environment:
       - NODE_ENV: "development"
+    parameters:
+      notify:
+        type: boolean
+        default: false
     steps:
       - checkout
       - run:
@@ -37,9 +44,30 @@ jobs:
           path: /tmp/artifacts
       - store_artifacts:
           path: /tmp/artifacts
+      - when:
+          condition: << parameters.notify >>
+          steps:
+            # Notify p4-builds-ci
+            - slack/status:
+                fail_only: true
+                channel: C024ZM2UB55
+                webhook: ${SLACK_NRO_WEBHOOK}
 
 workflows:
   main:
     jobs:
       - lint
       - test
+
+  nightly-test:
+    jobs:
+      - test:
+          context: org-global
+          notify: true
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - main
