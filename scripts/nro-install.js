@@ -3,7 +3,7 @@ const { getConfig } = require('./lib/config')
 const { run } = require('./lib/run')
 const { getBaseRepoFromGit, getMainReposFromRelease, installRepos } = require('./lib/main-repos')
 const { generateBaseComposerRequirements, generateNROComposerRequirements } = require('./lib/composer-requirements')
-const { createHtaccess, makeDirStructure, cloneIfNotExists, installPluginsDependencies } = require('./lib/utils')
+const { createHtaccess, makeDirStructure, cloneIfNotExists, installPluginsDependencies, readYaml } = require('./lib/utils')
 const { createDatabase, importDatabase, databaseExists, useDatabase } = require('./lib/mysql')
 const { basename } = require('path')
 const { existsSync } = require('fs')
@@ -85,19 +85,25 @@ if (themeName) {
 }
 
 /**
+ * Use CI config
+ */
+const ciConfig = readYaml(`${config.nro.dir}/.circleci/config.yml`)
+
+/**
  * Database
  */
-// @todo:
-// - Add reverse proxy
 if (databaseExists(config.nro.db)) {
   console.log(`Database ${config.nro.db} already exists, skipping database import.`)
   useDatabase(config.nro.db)
   if (themeName) {
     run(`wp-env run cli theme activate ${themeName}`)
   }
+
+  console.log(`The local instance is now available at ${config.config.WP_SITEURL}`)
   process.exit(0)
 }
 
+// Create and import database
 createDatabase(config.nro.db)
 const dumpList = String.fromCharCode(
   ...run(`gsutil ls -rl "gs://${config.nro.dbBucket}/**" | sort -k2`, { stdio: 'pipe' })
@@ -110,7 +116,20 @@ if (dumpUrl) {
   importDatabase(`content/${dumpName}`, config.nro.db)
   useDatabase(config.nro.db)
 }
+
+// Create/update admin user
 run('wp-env run cli user update admin --user_pass=admin --role=administrator')
 if (themeName) {
   run(`wp-env run cli theme activate ${themeName}`)
 }
+
+// Detect and replace original URL
+if (ciConfig) {
+  const host = ciConfig.job_environments.production_environment.APP_HOSTNAME || null
+  const path = ciConfig.job_environments.common_environment.APP_HOSTPATH || null
+  const nroUrl = `https://${host}/${path || ''}`
+  const newUrl = config.config.WP_SITEURL
+  run(`wp-env run cli search-replace ${nroUrl} ${newUrl} --precise --skip-columns=guid`)
+}
+
+console.log(`The local instance is now available at ${config.config.WP_SITEURL}`)

@@ -13,6 +13,9 @@ function check (cmd, title, fail) {
     console.log(`${greenCheck} ${output.trim()}`)
   } catch (error) {
     console.log(`${fail}`)
+    if (process.env.VERBOSE) {
+      console.log(error)
+    }
   }
 }
 
@@ -28,6 +31,6 @@ check('docker --version', 'Docker version:', `${redCross} Not found. Please inst
 check('docker compose version', 'Docker compose version:', `${redCross} Not found. Please install or activate Docker compose v2.`)
 check('wp-env --version', 'wp-env version:', `${redCross} Not found. Please install wp-env.`)
 const nvmPath = process.env.NVM_DIR ? `${process.env.NVM_DIR}/nvm.sh` : '~/.nvm/nvm.sh'
-check(`. ${nvmPath} && nvm --version`, 'nvm version:', `${redCross} Not found. Please install NVM.`)
+check(`. ${nvmPath} && nvm --version`, 'nvm version:', `${redCross} Not found (nvm path used: ${nvmPath}). Please install NVM.`)
 check('curl --version', 'curl version:', `${redCross} Not found. Please install Curl.`)
 check('gsutil version', 'gsutil version:', `${orangeCross} Not found. Install gsutil only if you want to import NRO database.`)

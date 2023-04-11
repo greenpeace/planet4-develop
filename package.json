@@ -1,6 +1,6 @@
 {
   "name": "planet4-develop",
-  "version": "v0.3",
+  "version": "v0.4",
   "description": "Planet 4 development environment",
   "author": "Planet 4",
   "scripts": {
@@ -38,5 +38,8 @@
     "eslint-plugin-promise": "6.1.1",
     "mocha": "10.2.0",
     "mocha-junit-reporter": "2.2.0"
+  },
+  "dependencies": {
+    "js-yaml": "4.1.0"
   }
 }
