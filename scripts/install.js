@@ -83,4 +83,4 @@ useDatabase(dbName)
 run('wp-env run cli plugin activate --all')
 run('wp-env run cli user update admin --user_pass=admin --role=administrator')
 
-console.log('Ready !')
+console.log(`The local instance is now available at ${config.config.WP_SITEURL}`)

@@ -1,5 +1,6 @@
-const { existsSync, lstatSync, readdirSync } = require('fs')
+const { existsSync, lstatSync, readdirSync, readFileSync, writeFileSync } = require('fs')
 const { run } = require('./run')
+const yaml = require('js-yaml')
 
 function isDir (path) {
   return existsSync(path) && lstatSync(path).isDirectory()
@@ -46,7 +47,21 @@ function installPluginsDependencies ({ pluginsDir }) {
 }
 
 function createHtaccess (config) {
-  run('docker compose -f $(wp-env install-path)/docker-compose.yml cp scripts/.htaccess wordpress:/var/www/html/.htaccess')
+  const htaccessTemplate = require('../.htaccess.tpl.js')
+  const content = htaccessTemplate(config.nro.imgBucket || null)
+  writeFileSync(`${config.appDir}/.htaccess`, content)
+  run(`docker compose -f $(wp-env install-path)/docker-compose.yml cp ${config.appDir}/.htaccess wordpress:/var/www/html/.htaccess`)
+}
+
+function readYaml (filePath) {
+  try {
+    const fileContent = readFileSync(filePath, 'utf8')
+    const parsedYaml = yaml.load(fileContent)
+    return parsedYaml
+  } catch (err) {
+    console.error('Error reading or parsing YAML:', err)
+    return null
+  }
 }
 
 module.exports = {
@@ -55,5 +70,6 @@ module.exports = {
   cloneIfNotExists,
   makeDirStructure,
   installPluginsDependencies,
-  createHtaccess
+  createHtaccess,
+  readYaml
 }

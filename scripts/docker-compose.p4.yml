@@ -1,0 +1,17 @@
+---
+version: '3'
+services:
+  redis:
+    image: ${REDIS_IMAGE:-redis:4-stretch}
+
+  elasticsearch:
+    image: gcr.io/planet-4-151612/elasticsearch:${ELASTICSEARCH_BUILD_TAG:-latest}
+    environment:
+      - discovery.type=single-node
+
+  elastichq:
+    image: elastichq/elasticsearch-hq
+    environment:
+      HQ_DEFAULT_URL: http://elasticsearch:9200
+    ports:
+      - "5000:5000"

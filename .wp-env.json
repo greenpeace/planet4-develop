@@ -8,8 +8,8 @@
     "wp-content/languages": "./planet4/languages"
   },
   "config": {
-    "KEY_1": true,
-    "KEY_2": false
+    "WP_SITEURL": "http://www.planet4.test/",
+    "WP_HOME": "http://www.planet4.test/"
   },
   "env": {
     "development": {

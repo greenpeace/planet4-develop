@@ -3,7 +3,10 @@
 
 ![Last pipeline result on main branch](https://circleci.com/gh/greenpeace/planet4-develop.svg?style=shield)
 
-_Get a full Planet 4 development environment to your local machine_  
+<p align="center"><em>
+Get a full Planet 4 development environment to your local machine!
+</em></p>
+
 We are using [`wp-env`](https://github.com/WordPress/gutenberg/blob/trunk/packages/env/README.md) as a base and pulling all necessary themes and plugins so that you can develop for your website more easily.
 
 
@@ -28,17 +31,25 @@ We are using [`wp-env`](https://github.com/WordPress/gutenberg/blob/trunk/packag
 ```console
 > nvm use
 ```
-
-## Installation
-
-Check the requirements with: 
+- Check the requirements with: 
 ```console
 > npm run env:requirements
 ```
+- Install npm packages:
+```console
+> npm install
+```
 
-Install with: 
+## Installation
+
+Install default developer environment with:
 ```console
 > npm run env:install
+```
+
+For NRO developers, use instead:
+```console
+> npm run nro:install <your nro name>
 ```
 
 ## Clean up
@@ -60,7 +71,7 @@ npm run
 - env:clean-repos                   Remove main repos if they are not git repositories
 - env:update                        Update installer, base and main repos
 - env:status                        Status of docker containers
-- nro:install <?nro>                Install NRO theme and database, if declared in .p4-env.json
+- nro:install <?nro>                Install NRO theme and database
 - nro:enable                        Enable installed NRO theme and database
 - nro:disable                       Switch back to default theme and database
 - nro:theme <?nro>                  Clone NRO theme in themes dir
@@ -68,6 +79,10 @@ npm run
 - build:repos                       Clone and install main repos
 - db:import <dump path> <db name>   Import database dump (gzip)
 - db:use <db name>                  Switch to database
+- shell:php                         Access PHP shell (WordPress container)
+- shell:mysql                       Access MySQL console (current database)
+- elastic:activate                  Activate ElasticSearch container and plugin
+- elastic:deactivate                Deactivate ElasticSearch container and plugin
 ```
 
 ## Workflow
@@ -96,13 +111,6 @@ npm run
 ### Composer
 - execute @site:custom scripts
   - figure out replacement of `wp` commands 
-
-### Images
-- reverse proxy
-  - similar to nginx, but for Apache2
-
-### Rewrite rules
-- adapt to Apache2
 
 ### WPML
 - String Translation issues writing in languages folder

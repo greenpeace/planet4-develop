@@ -1,6 +1,6 @@
 {
   "name": "planet4-develop",
-  "version": "v0.3",
+  "version": "v0.4",
   "description": "Planet 4 development environment",
   "author": "Planet 4",
   "scripts": {
@@ -23,6 +23,10 @@
     "build:repos": "node ./scripts/build-repos.js",
     "db:import": "node ./scripts/db-import.js",
     "db:use": "node ./scripts/db-use.js",
+    "elastic:activate": "node ./scripts/elastic.js activate",
+    "elastic:deactivate": "node ./scripts/elastic.js deactivate",
+    "shell:php": "node ./scripts/shell.js php",
+    "shell:mysql": "node ./scripts/shell.js mysql",
     "lint": "eslint",
     "test": "mocha --reporter mocha-junit-reporter --reporter-options mochaFile=junit.xml"
   },
@@ -34,5 +38,8 @@
     "eslint-plugin-promise": "6.1.1",
     "mocha": "10.2.0",
     "mocha-junit-reporter": "2.2.0"
+  },
+  "dependencies": {
+    "js-yaml": "4.1.0"
   }
 }
