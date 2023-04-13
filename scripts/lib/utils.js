@@ -48,7 +48,7 @@ function installPluginsDependencies ({ pluginsDir }) {
 
 function createHtaccess (config) {
   const htaccessTemplate = require('../.htaccess.tpl.js')
-  const content = htaccessTemplate(config.nro.imgBucket || null)
+  const content = htaccessTemplate(config.nro?.imgBucket || null)
   writeFileSync(`${config.appDir}/.htaccess`, content)
   run(`docker compose -f $(wp-env install-path)/docker-compose.yml cp ${config.appDir}/.htaccess wordpress:/var/www/html/.htaccess`)
 }
