@@ -9,6 +9,7 @@ function generateBaseComposerRequirements (config) {
   run(`wp-env run composer -d /app/${config.appDir}/ config --unset extra.merge-plugin`)
   run(`wp-env run composer -d /app/${config.appDir}/ config --json extra.installer-paths '"{\\"plugins/{\\$name}/\\": [\\"type:wordpress-plugin\\"],\\"themes/{\\$name}/\\": [\\"type:wordpress-theme\\"]}"'`)
   run(`wp-env run composer -d /app/${config.appDir}/ config platform.php "${config.phpVersion}"`)
+  run(`wp-env run composer -d /app/${config.appDir}/ config process-timeout ${config.planet4.composer.processTimeout}`)
 
   if (isDir(`${config.themesDir}/planet4-master-theme`)) {
     run(`wp-env run composer -d /app/${config.appDir}/ remove --no-update greenpeace/planet4-master-theme`)

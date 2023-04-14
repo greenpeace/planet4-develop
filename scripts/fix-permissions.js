@@ -6,6 +6,7 @@ const config = getConfig()
 
 if (all) {
   run(`sudo find ${config.appDir} -not -user $(whoami) -exec chown -f $(whoami) {} \\+`)
+  run(`sudo chmod 777 ${config.appDir}/uploads`)
 } else {
   run(`sudo find ${config.themesDir}/planet4-master-theme -not -user $(whoami) -exec chown -f $(whoami) {} \\+`)
   run(`sudo find ${config.pluginsDir}/planet4-plugin-gutenberg-blocks -not -user $(whoami) -exec chown -f $(whoami) {} \\+`)
