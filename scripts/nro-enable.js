@@ -1,7 +1,7 @@
 const { getConfig } = require('./lib/config')
 const { run } = require('./lib/run')
 const { generateNROComposerRequirements } = require('./lib/composer-requirements')
-const { cloneIfNotExists } = require('./utils')
+const { cloneIfNotExists } = require('./lib/utils')
 
 /**
  * Config
