@@ -27,7 +27,7 @@ function createDatabase (dbName) {
 
 function importDatabase (gzFilepath, dbName) {
   mysqlRootExec('-e \'SET GLOBAL max_allowed_packet=16777216\'')
-  run(`zcat < "${gzFilepath}" | sed '/@@GLOBAL.GTID_PURGED=/d' | ${mysqlRootCommandNoTTY(dbName)}`)
+  run(`zcat < "${gzFilepath}" | LANG=C sed '/@@GLOBAL.GTID_PURGED=/d' | ${mysqlRootCommandNoTTY(dbName)}`)
   // Fix GTID_PURGED value issue
   // mysqlRootExec -D ${dbName} -e 'RESET MASTER'
 }

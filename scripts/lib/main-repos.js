@@ -51,8 +51,10 @@ function getMainReposFromRelease (config, force = false) {
 
 function installRepos (config) {
   run(`wp-env run composer -d /app/${config.themesDir}/planet4-master-theme config platform.php "${config.phpVersion}"`)
+  run(`wp-env run composer -d /app/${config.themesDir}/planet4-master-theme config process-timeout ${config.planet4.composer.processTimeout}`)
   run(`wp-env run composer -d /app/${config.themesDir}/planet4-master-theme install --ignore-platform-reqs`)
   run(`wp-env run composer -d /app/${config.pluginsDir}/planet4-plugin-gutenberg-blocks config platform.php "${config.phpVersion}"`)
+  run(`wp-env run composer -d /app/${config.pluginsDir}/planet4-plugin-gutenberg-blocks config process-timeout ${config.planet4.composer.processTimeout}`)
   run(`wp-env run composer -d /app/${config.pluginsDir}/planet4-plugin-gutenberg-blocks install --ignore-platform-reqs`)
 }
 
