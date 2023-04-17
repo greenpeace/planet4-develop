@@ -19,8 +19,6 @@ console.log(process.cwd(), '\n', config)
 // self - and rerun ?
 if (isRepo(process.cwd())) {
   run('git pull || true', { cwd: `${process.cwd()}` })
-} else {
-  // download release
 }
 
 // base dir
@@ -45,3 +43,6 @@ if (isRepo(`${config.themesDir}/planet4-master-theme`)
 
 // default images
 // default DB
+
+run('wp-env stop || true')
+run('wp-env start --update')
