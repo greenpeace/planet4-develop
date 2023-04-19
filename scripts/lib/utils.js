@@ -42,7 +42,7 @@ function installPluginsDependencies ({ pluginsDir }) {
       return
     }
 
-    run(`wp-env run composer -d /app/${path} update --ignore-platform-reqs`)
+    run(`wp-env run composer -d /app/${path} update -n --ignore-platform-reqs`)
   })
 }
 

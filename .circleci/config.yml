@@ -4,6 +4,15 @@ version: 2.1
 orbs:
   slack: circleci/slack@3.4.2
 
+commands:
+  activate_gcloud:
+    steps:
+      - run:
+          name: Activate gcloud
+          command: |
+            git clone --depth=1 https://github.com/greenpeace/planet4-circleci.git
+            ./planet4-circleci/src/bin/activate-gcloud-account.sh
+
 jobs:
   lint:
     docker:
@@ -18,7 +27,7 @@ jobs:
             npm install
             npm run lint -- scripts
 
-  test:
+  unit-test:
     docker:
       - image: node:16
     environment:
@@ -53,15 +62,87 @@ jobs:
                 channel: C024ZM2UB55
                 webhook: ${SLACK_NRO_WEBHOOK}
 
+  env-install:
+    machine:
+      image: ubuntu-2204:2023.02.1
+    parameters:
+      notify:
+        type: boolean
+        default: false
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+              nvm install 16
+              npm -g i @wordpress/env
+      - run:
+          name: Install environment
+          command: |
+              nvm use
+              npm install
+              npm run env:requirements
+              VERBOSE=true npm run env:install
+      - when:
+          condition: << parameters.notify >>
+          steps:
+            # Notify p4-builds-ci
+            - slack/status:
+                fail_only: true
+                channel: C024ZM2UB55
+                webhook: ${SLACK_NRO_WEBHOOK}
+
+  nro-install:
+    machine:
+      image: ubuntu-2204:2023.02.1
+    environment:
+      GOOGLE_PROJECT_ID: planet-4-151612
+    parameters:
+      notify:
+        type: boolean
+        default: false
+    steps:
+      - checkout
+      - activate_gcloud
+      - run:
+          name: Install dependencies
+          command: |
+              nvm install 16
+              npm -g i @wordpress/env
+      - run:
+          name: Install environment
+          command: |
+              nvm use
+              npm install
+              npm run env:requirements
+              VERBOSE=true npm run nro:install greece
+      - when:
+          condition: << parameters.notify >>
+          steps:
+            # Notify p4-builds-ci
+            - slack/status:
+                fail_only: true
+                channel: C024ZM2UB55
+                webhook: ${SLACK_NRO_WEBHOOK}
+
 workflows:
   main:
     jobs:
       - lint
-      - test
+      - unit-test
+      - env-install
+      - nro-install:
+          context: org-global
 
   nightly-test:
     jobs:
-      - test:
+      - unit-test:
+          context: org-global
+          notify: true
+      - env-install:
+          context: org-global
+          notify: true
+      - nro-install:
           context: org-global
           notify: true
     triggers:
