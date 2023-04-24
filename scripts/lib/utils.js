@@ -64,6 +64,27 @@ function readYaml (filePath) {
   }
 }
 
+function parseArgs (args, def) {
+  const interpreter = args.shift()
+  const script = args.shift()
+  const options = args.filter(v => v.startsWith('--'))
+  const commands = args.filter(v => !options.includes(v))
+  const command = commands[0] || def?.command || null
+
+  const parsed = {
+    interpreter,
+    script,
+    command,
+    options
+  }
+
+  if (process.env.VERBOSE) {
+    console.log(parsed)
+  }
+
+  return parsed
+}
+
 module.exports = {
   isDir,
   isRepo,
@@ -71,5 +92,6 @@ module.exports = {
   makeDirStructure,
   installPluginsDependencies,
   createHtaccess,
-  readYaml
+  readYaml,
+  parseArgs
 }

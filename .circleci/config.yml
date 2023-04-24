@@ -65,6 +65,8 @@ jobs:
   env-install:
     machine:
       image: ubuntu-2204:2023.02.1
+    environment:
+      - WP_ENV_VERSION: "5.16.0"
     parameters:
       notify:
         type: boolean
@@ -75,7 +77,7 @@ jobs:
           name: Install dependencies
           command: |
               nvm install 16
-              npm -g i @wordpress/env
+              npm -g i @wordpress/env@${WP_ENV_VERSION}
       - run:
           name: Install environment
           command: |
@@ -83,6 +85,26 @@ jobs:
               npm install
               npm run env:requirements
               VERBOSE=true npm run env:install
+      - run:
+          name: E2E tests
+          command: |
+              echo -e "\n# Planet4 local development environment\n127.0.0.1\twww.planet4.test" | sudo tee -a /etc/hosts;
+              nvm use
+              npm run env:e2e-install -- --with-deps
+              npm run env:e2e
+      - run:
+          name: Extract tests artifacts
+          when: always
+          command: |
+            mkdir -p /home/circleci/artifacts/playwright/themes /home/circleci/artifacts/playwright/plugins
+            cp -r planet4/themes/planet4-master-theme/e2e-* /home/circleci/artifacts/playwright/themes || true
+            cp planet4/themes/planet4-master-theme/results.xml /home/circleci/artifacts/playwright/themes || true
+            cp -r planet4/plugins/planet4-plugins-gutenberg-blocks/e2e-* /home/circleci/artifacts/playwright/plugins || true
+            cp planet4/plugins/planet4-plugins-gutenberg-blocks/results.xml /home/circleci/artifacts/playwright/plugins || true
+      - store_test_results:
+          path: /home/circleci/artifacts
+      - store_artifacts:
+          path: /home/circleci/artifacts
       - when:
           condition: << parameters.notify >>
           steps:
@@ -96,7 +118,8 @@ jobs:
     machine:
       image: ubuntu-2204:2023.02.1
     environment:
-      GOOGLE_PROJECT_ID: planet-4-151612
+      - GOOGLE_PROJECT_ID: planet-4-151612
+      - WP_ENV_VERSION: "latest"
     parameters:
       notify:
         type: boolean
@@ -108,7 +131,7 @@ jobs:
           name: Install dependencies
           command: |
               nvm install 16
-              npm -g i @wordpress/env
+              npm -g i @wordpress/env@${WP_ENV_VERSION}
       - run:
           name: Install environment
           command: |

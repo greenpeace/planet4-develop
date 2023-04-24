@@ -71,6 +71,8 @@ npm run
 - env:clean-repos                   Remove main repos if they are not git repositories
 - env:update                        Update installer, base and main repos
 - env:status                        Status of docker containers
+- env:e2e-install                   Install E2E tests dependencies
+- env:e2e                           Run E2E tests on local instance
 - nro:install <?nro>                Install NRO theme and database
 - nro:enable                        Enable installed NRO theme and database
 - nro:disable                       Switch back to default theme and database
