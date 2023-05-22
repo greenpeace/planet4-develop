@@ -1,5 +1,5 @@
 const { getConfig } = require('./lib/config')
-const { run } = require('./lib/run')
+const { composer, wp } = require('./lib/run')
 const { generateNROComposerRequirements } = require('./lib/composer-requirements')
 const { cloneIfNotExists } = require('./lib/utils')
 
@@ -29,12 +29,12 @@ if (theme) {
   themeName = theme.replace('greenpeace/', '')
   const themePath = `${config.themesDir}/${themeName}`
   cloneIfNotExists(themePath, `https://github.com/${theme}.git`)
-  run(`wp-env run composer -d /app/${config.appDir}/ remove --no-update ${theme}`)
+  composer(`remove --no-update ${theme}`, `/app/${config.paths.local.app}/`)
 }
 
-run(`wp-env run composer -d /app/${config.appDir}/ update --ignore-platform-reqs`)
+composer('update', `/app/${config.paths.local.app}/`)
 if (themeName) {
-  run(`wp-env run cli theme activate ${themeName}`)
+  wp(`theme activate ${themeName}`)
 }
 
 /**

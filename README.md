@@ -94,25 +94,9 @@ npm run
   - you can add or create any theme in this folder, it will be available in your local instance
 - plugins are installed in `planet4/plugins`
   - if a plugin you want to work on is not writable, either use `npm run env:fix-permissions`, or remove it and clone your own repo to replace it
-  - you can add or create any theme in this folder, it will be available in your local instance
+  - you can add or create any plugin in this folder, it will be available in your local instance
 
 ## Resources
 
 - https://github.com/WordPress/gutenberg/tree/trunk/packages/env
 - https://github.com/WordPress/developer-blog-content/issues/89
-
-## To do
-
-### Perfs
-- Add Redis server to check if instance is faster that way
-
-### Permissions
-- check why everything is root (missing user with UID used by wp-env ?)
-  - https://github.com/WordPress/gutenberg/issues/28201 maybe
-
-### Composer
-- execute @site:custom scripts
-  - figure out replacement of `wp` commands 
-
-### WPML
-- String Translation issues writing in languages folder

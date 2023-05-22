@@ -66,7 +66,7 @@ jobs:
     machine:
       image: ubuntu-2204:2023.02.1
     environment:
-      - WP_ENV_VERSION: "5.16.0"
+      - WP_ENV_VERSION: "8.0.0"
     parameters:
       notify:
         type: boolean
@@ -99,8 +99,8 @@ jobs:
             mkdir -p /home/circleci/artifacts/playwright/themes /home/circleci/artifacts/playwright/plugins
             cp -r planet4/themes/planet4-master-theme/e2e-* /home/circleci/artifacts/playwright/themes || true
             cp planet4/themes/planet4-master-theme/results.xml /home/circleci/artifacts/playwright/themes || true
-            cp -r planet4/plugins/planet4-plugins-gutenberg-blocks/e2e-* /home/circleci/artifacts/playwright/plugins || true
-            cp planet4/plugins/planet4-plugins-gutenberg-blocks/results.xml /home/circleci/artifacts/playwright/plugins || true
+            cp -r planet4/plugins/planet4-plugin-gutenberg-blocks/e2e-* /home/circleci/artifacts/playwright/plugins || true
+            cp planet4/plugins/planet4-plugin-gutenberg-blocks/results.xml /home/circleci/artifacts/playwright/plugins || true
       - store_test_results:
           path: /home/circleci/artifacts
       - store_artifacts:
@@ -119,7 +119,7 @@ jobs:
       image: ubuntu-2204:2023.02.1
     environment:
       - GOOGLE_PROJECT_ID: planet-4-151612
-      - WP_ENV_VERSION: "latest"
+      - WP_ENV_VERSION: "8.0.0"
     parameters:
       notify:
         type: boolean

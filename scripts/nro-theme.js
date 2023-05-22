@@ -1,4 +1,4 @@
-const { nodeCheck } = require('./lib/node-check')
+const { nodeCheck } = require('./lib/env-check')
 const { getConfig } = require('./lib/config')
 const { cloneIfNotExists } = require('./lib/utils')
 const { getNroComposerRequirements } = require('./lib/composer-requirements')

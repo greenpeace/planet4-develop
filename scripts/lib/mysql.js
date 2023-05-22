@@ -1,4 +1,4 @@
-const { run } = require('./run')
+const { run, wp } = require('./run')
 
 function mysqlRootExec (cmd, opts) {
   const dcCommand = mysqlRootCommand(cmd)
@@ -33,7 +33,7 @@ function importDatabase (gzFilepath, dbName) {
 }
 
 function useDatabase (dbName) {
-  run(`wp-env run cli config set DB_NAME ${dbName}`)
+  wp(`config set DB_NAME ${dbName}`)
 }
 
 function databaseExists (dbName) {

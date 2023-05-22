@@ -1,39 +1,44 @@
-const { run } = require('./run')
+const { run, composer } = require('./run')
 const { isDir, isRepo, cloneIfNotExists } = require('./utils')
 
-function getBaseRepoFromGit ({ baseDir, planet4 }) {
-  cloneIfNotExists(baseDir, 'https://github.com/greenpeace/planet4-base.git')
+function getBaseRepoFromGit (config) {
+  cloneIfNotExists(
+    `${config.paths.local.app}/planet4-base`,
+    'https://github.com/greenpeace/planet4-base.git'
+  )
 
   run(
-    `git checkout ${planet4.repos['planet4-base'] || 'main'} || true`,
-    { cwd: `${baseDir}` }
+    `git checkout ${config.planet4.repos['planet4-base'] || 'main'} || true`,
+    { cwd: `${config.paths.local.app}/planet4-base` }
   )
 }
 
-function getMainReposFromGit ({ themesDir, pluginsDir, planet4 }) {
-  isRepo(`${themesDir}/planet4-master-theme`)
-    ? run('git status', { cwd: `${themesDir}/planet4-master-theme` })
-    : run(`git clone https://github.com/greenpeace/planet4-master-theme.git ${themesDir}/planet4-master-theme`)
+function getMainReposFromGit (config) {
+  const themePath = `${config.paths.local.themes}/planet4-master-theme`
+  isRepo(themePath)
+    ? run('git status', { cwd: themePath })
+    : run(`rm -rf ${themePath} && git clone https://github.com/greenpeace/planet4-master-theme.git ${themePath}`)
 
   run(
-    `git checkout ${planet4.repos['planet4-master-theme'] || 'main'} || true`,
-    { cwd: `${themesDir}/planet4-master-theme` }
+    `git checkout ${config.planet4.repos['planet4-master-theme'] || 'main'} || true`,
+    { cwd: themePath }
   )
 
-  isRepo(`${pluginsDir}/planet4-plugin-gutenberg-blocks`)
-    ? run('git status', { cwd: `${pluginsDir}/planet4-plugin-gutenberg-blocks` })
-    : run(`git clone --recurse-submodules --shallow-submodule https://github.com/greenpeace/planet4-plugin-gutenberg-blocks.git ${pluginsDir}/planet4-plugin-gutenberg-blocks`)
+  const pluginPath = `${config.paths.local.plugins}/planet4-plugin-gutenberg-blocks`
+  isRepo(pluginPath)
+    ? run('git status', { cwd: pluginPath })
+    : run(`rm -rf ${pluginPath} && git clone --recurse-submodules --shallow-submodule https://github.com/greenpeace/planet4-plugin-gutenberg-blocks.git ${pluginPath}`)
 
   run(
-    `git checkout ${planet4.repos['planet4-plugin-gutenberg-blocks'] || 'main'} || true`,
-    { cwd: `${pluginsDir}/planet4-plugin-gutenberg-blocks` }
+    `git checkout ${config.planet4.repos['planet4-plugin-gutenberg-blocks'] || 'main'} || true`,
+    { cwd: pluginPath }
   )
 };
 
 function getMainReposFromRelease (config, force = false) {
   if (!force
-    && isDir(`${config.themesDir}/planet4-master-theme`)
-    && isDir(`${config.pluginsDir}/planet4-plugin-gutenberg-blocks`)
+    && isDir(`${config.paths.local.themes}/planet4-master-theme`)
+    && isDir(`${config.paths.local.plugins}/planet4-plugin-gutenberg-blocks`)
   ) {
     return
   }
@@ -44,38 +49,41 @@ function getMainReposFromRelease (config, force = false) {
   run(`curl -L ${themeRelease} > content/planet4-master-theme.zip`)
   run(`curl -L ${pluginRelease} > content/planet4-plugin-gutenberg-blocks.zip`)
 
-  run(`mkdir -p ${config.themesDir} && mkdir -p ${config.pluginsDir}`)
-  run(`unzip -o content/planet4-master-theme.zip -d ${config.themesDir}/planet4-master-theme`)
-  run(`unzip -o content/planet4-plugin-gutenberg-blocks.zip -d ${config.pluginsDir}/planet4-plugin-gutenberg-blocks`)
+  run(`mkdir -p ${config.paths.local.themes} && mkdir -p ${config.paths.local.plugins}`)
+  run(`unzip -o content/planet4-master-theme.zip -d ${config.paths.local.themes}/planet4-master-theme`)
+  run(`unzip -o content/planet4-plugin-gutenberg-blocks.zip -d ${config.paths.local.plugins}/planet4-plugin-gutenberg-blocks`)
 }
 
 function installRepos (config) {
-  run(`wp-env run composer -d /app/${config.themesDir}/planet4-master-theme config platform.php "${config.phpVersion}"`)
-  run(`wp-env run composer -d /app/${config.themesDir}/planet4-master-theme config process-timeout ${config.planet4.composer.processTimeout}`)
-  run(`wp-env run composer -d /app/${config.themesDir}/planet4-master-theme install --ignore-platform-reqs`)
-  run(`wp-env run composer -d /app/${config.pluginsDir}/planet4-plugin-gutenberg-blocks config platform.php "${config.phpVersion}"`)
-  run(`wp-env run composer -d /app/${config.pluginsDir}/planet4-plugin-gutenberg-blocks config process-timeout ${config.planet4.composer.processTimeout}`)
-  run(`wp-env run composer -d /app/${config.pluginsDir}/planet4-plugin-gutenberg-blocks install --ignore-platform-reqs`)
+  // composer(`config platform.php "${config.phpVersion}"`, `/app/${config.themesDir}/planet4-master-theme `)
+  composer('install', `${config.paths.container.themes}/planet4-master-theme `)
+  // composer(`config platform.php "${config.phpVersion}"`, `/app/${config.pluginsDir}/planet4-plugin-gutenberg-blocks`)
+  composer('install', `${config.paths.container.plugins}/planet4-plugin-gutenberg-blocks`)
+
+  if (config?.planet4?.composer?.processTimeout) {
+    composer(`config process-timeout ${config.planet4.composer.processTimeout}`, `${config.paths.container.themes}/planet4-master-theme `)
+    composer(`config process-timeout ${config.planet4.composer.processTimeout}`, `${config.paths.container.plugins}/planet4-plugin-gutenberg-blocks`)
+  }
 }
 
 function installNpmDependencies (config) {
   process.env.PUPPETEER_SKIP_DOWNLOAD = true
   process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true
-  run('npm install', { cwd: `${config.themesDir}/planet4-master-theme` })
-  run('npm install', { cwd: `${config.pluginsDir}/planet4-plugin-gutenberg-blocks` })
+  run('npm install', { cwd: `${config.paths.local.themes}/planet4-master-theme` })
+  run('npm install', { cwd: `${config.paths.local.plugins}/planet4-plugin-gutenberg-blocks` })
 }
 
 function buildAssets (config, force = false) {
   if (!force
-    && isDir(`${config.themesDir}/planet4-master-theme/assets/build`)
-    && isDir(`${config.pluginsDir}/planet4-plugin-gutenberg-blocks/assets/build`)
+    && isDir(`${config.paths.local.themes}/planet4-master-theme/assets/build`)
+    && isDir(`${config.paths.local.plugins}/planet4-plugin-gutenberg-blocks/assets/build`)
   ) {
     return
   }
 
   installNpmDependencies(config)
-  run('npm run build', { cwd: `${config.themesDir}/planet4-master-theme` })
-  run('npm run build', { cwd: `${config.pluginsDir}/planet4-plugin-gutenberg-blocks` })
+  run('npm run build', { cwd: `${config.paths.local.themes}/planet4-master-theme` })
+  run('npm run build', { cwd: `${config.paths.local.plugins}/planet4-plugin-gutenberg-blocks` })
 }
 
 module.exports = {

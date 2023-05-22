@@ -1,0 +1,16 @@
+{
+  "planet4": {
+    "content": {
+      "db": "v0.2.18",
+      "images": "1-25"
+    },
+    "repos": {
+      "planet4-base": "main",
+      "planet4-master-theme": "main",
+      "planet4-plugin-gutenberg-blocks": "main"
+    },
+    "composer": {
+      "processTimeout": "600"
+    }
+  }
+}

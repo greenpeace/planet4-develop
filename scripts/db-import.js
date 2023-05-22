@@ -1,5 +1,5 @@
 const { existsSync } = require('fs')
-const { run } = require('./lib/run')
+const { wp } = require('./lib/run')
 const { createDatabase, importDatabase, useDatabase } = require('./lib/mysql')
 
 if (!process.argv[2] || !process.argv[3]) {
@@ -23,4 +23,4 @@ if (!dbName.match(/^[a-z0-9_]*$/)) {
 createDatabase(dbName)
 importDatabase(filepath, dbName)
 useDatabase(dbName)
-run('wp-env run cli user update admin --user_pass=admin --role=administrator')
+wp('user update admin --user_pass=admin --role=administrator')
