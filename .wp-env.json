@@ -18,7 +18,7 @@
   },
   "planet4": {
     "content": {
-      "db": "0.2.22",
+      "db": "v0.2.23",
       "images": "1-25"
     },
     "repos": {
