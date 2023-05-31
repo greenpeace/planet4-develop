@@ -1,7 +1,7 @@
 
 # Planet 4 development environment
 
-![Last pipeline result on main branch](https://circleci.com/gh/greenpeace/planet4-develop.svg?style=shield)
+[![Last pipeline result on main branch](https://circleci.com/gh/greenpeace/planet4-develop.svg?style=shield)](https://app.circleci.com/pipelines/github/greenpeace/planet4-develop)
 
 <p align="center"><em>
 Get a full Planet 4 development environment to your local machine!
@@ -29,33 +29,33 @@ We are using [`wp-env`](https://github.com/WordPress/gutenberg/blob/trunk/packag
 - Clone this repo
 - Set node version
 ```console
-> nvm use
+nvm use
 ```
 - Check the requirements with: 
 ```console
-> npm run env:requirements
+npm run env:requirements
 ```
 - Install npm packages:
 ```console
-> npm install
+npm install
 ```
 
 ## Installation
 
 Install default developer environment with:
 ```console
-> npm run env:install
+npm run env:install
 ```
 
 For NRO developers, use instead:
 ```console
-> npm run nro:install <your nro name>
+npm run nro:install <your nro name>
 ```
 
 ## Clean up
 
 ```console
-> npm run env:clean
+npm run env:clean
 ```
 
 ## All commands
