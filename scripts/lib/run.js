@@ -15,4 +15,33 @@ function run (cmd, opts) {
   return execSync(cmd, { stdio: 'inherit', ...opts })
 }
 
-module.exports = { run }
+function runWithOutput (cmd, opts) {
+  return String.fromCharCode(...run(cmd, { stdio: 'pipe', ...opts })).trim()
+}
+
+function wpenvRun (cmd, cwd, opts = {}) {
+  run(
+    cwd ? `wp-env run --env-cwd=${cwd} ${cmd}` : `wp-env run ${cmd}`,
+    opts
+  )
+}
+
+function cli (cmd) {
+  return wpenvRun(`cli ${cmd}`)
+}
+
+function composer (cmd, cwd) {
+  if (process.env.VERBOSE) {
+    console.log(cmd, cwd)
+  }
+  return wpenvRun(
+    `cli composer ${cmd}`,
+    cwd && cwd.startsWith('/') ? cwd : `/var/www/html/${cwd}`
+  )
+}
+
+function wp (cmd, opts) {
+  return wpenvRun(`cli wp ${cmd}`, null, opts)
+}
+
+module.exports = { run, runWithOutput, cli, composer, wp }

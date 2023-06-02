@@ -3,10 +3,10 @@ const { getConfig } = require('../scripts/lib/config')
 
 describe('Config', () => {
   it('Config override works', () => {
-    const override = { baseDir: 'foo', env: { development: { port: 99 } } }
+    const override = { app: 'foo', env: { development: { port: 99 } } }
     const config = getConfig(override)
 
-    assert.ok(config.baseDir === 'foo')
+    assert.ok(config.app === 'foo')
     assert.ok(config.env.development.port === 99)
   })
 

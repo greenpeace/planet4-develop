@@ -1,9 +1,9 @@
-const { nodeCheck } = require('./lib/node-check')
+const { nodeCheck } = require('./lib/env-check')
 const { getConfig } = require('./lib/config')
-const { run } = require('./lib/run')
+const { run, runWithOutput, composer, wp } = require('./lib/run')
 const { getBaseRepoFromGit, getMainReposFromRelease, installRepos } = require('./lib/main-repos')
 const { generateBaseComposerRequirements, generateNROComposerRequirements } = require('./lib/composer-requirements')
-const { createHtaccess, makeDirStructure, cloneIfNotExists, installPluginsDependencies, readYaml } = require('./lib/utils')
+const { createHtaccess, makeDirStructure, cloneIfNotExists, readYaml } = require('./lib/utils')
 const { createDatabase, importDatabase, databaseExists, useDatabase } = require('./lib/mysql')
 const { basename } = require('path')
 const { existsSync } = require('fs')
@@ -47,7 +47,10 @@ installRepos(config)
  * Clone NRO deployment repo
  */
 console.log('Cloning deployment repo ...')
-cloneIfNotExists(config.nro.dir, `https://github.com/greenpeace/${config.nro.repo}.git`)
+cloneIfNotExists(
+  `${config.paths.local.app}/${config.nro.dir}`,
+  `https://github.com/greenpeace/${config.nro.repo}.git`
+)
 
 /**
  * Merge base composer requirements
@@ -69,25 +72,20 @@ const theme = keys[0] || null
 let themeName = null
 if (theme) {
   themeName = theme.replace('greenpeace/', '')
-  const themePath = `${config.themesDir}/${themeName}`
+  const themePath = `${config.paths.local.themes}/${themeName}`
   cloneIfNotExists(themePath, `https://github.com/${theme}.git`)
-  run(`wp-env run composer -d /app/${config.appDir}/ remove --no-update ${theme}`)
+  composer(`remove --no-update ${theme}`, config.paths.container.app)
 
   if (existsSync(`${themePath}/composer.json`)) {
-    run(`wp-env run composer -d /app/${themePath}/ update --ignore-platform-reqs`)
+    composer('update', `${config.paths.container.themes}/${themeName}`)
   }
 }
 
-run(`wp-env run composer -d /app/${config.appDir}/ update --ignore-platform-reqs`)
-installPluginsDependencies(config)
+composer('update', config.paths.container.app)
+// installPluginsDependencies(config)
 if (themeName) {
-  run(`wp-env run cli theme activate ${themeName}`)
+  wp(`theme activate ${themeName}`)
 }
-
-/**
- * Use CI config
- */
-const ciConfig = readYaml(`${config.nro.dir}/.circleci/config.yml`)
 
 /**
  * Database
@@ -96,18 +94,17 @@ if (databaseExists(config.nro.db)) {
   console.log(`Database ${config.nro.db} already exists, skipping database import.`)
   useDatabase(config.nro.db)
   if (themeName) {
-    run(`wp-env run cli theme activate ${themeName}`)
+    wp(`theme activate ${themeName}`)
   }
 
+  composer('run-script site:custom', config.paths.container.app)
   console.log(`The local instance is now available at ${config.config.WP_SITEURL}`)
   process.exit(0)
 }
 
 // Create and import database
 createDatabase(config.nro.db)
-const dumpList = String.fromCharCode(
-  ...run(`gsutil ls -rl "gs://${config.nro.dbBucket}/**" | sort -k2`, { stdio: 'pipe' })
-).trim().split(/\r?\n/)
+const dumpList = runWithOutput(`gsutil ls -rl "gs://${config.nro.dbBucket}/**" | sort -k2`).split(/\r?\n/)
 const dumpUrl = dumpList[dumpList.length - 2].trim().split('  ')[2] || null
 if (dumpUrl) {
   console.log(`Dump found: ${dumpUrl}`)
@@ -118,10 +115,18 @@ if (dumpUrl) {
 }
 
 // Create/update admin user
-run('wp-env run cli user update admin --user_pass=admin --role=administrator')
+wp('user update admin --user_pass=admin --role=administrator')
 if (themeName) {
-  run(`wp-env run cli theme activate ${themeName}`)
+  wp(`theme activate ${themeName}`)
 }
+
+// Run custom scripts
+composer('run-script site:custom', config.paths.container.app)
+
+/**
+ * Use CI config
+ */
+const ciConfig = readYaml(`${config.paths.local.app}/${config.nro.dir}/.circleci/config.yml`)
 
 // Detect and replace original URL
 if (ciConfig) {
@@ -129,7 +134,7 @@ if (ciConfig) {
   const path = ciConfig.job_environments.common_environment.APP_HOSTPATH || null
   const nroUrl = `https://${host}/${path || ''}`
   const newUrl = config.config.WP_SITEURL
-  run(`wp-env run cli search-replace ${nroUrl} ${newUrl} --precise --skip-columns=guid`)
+  wp(`search-replace ${nroUrl} ${newUrl} --precise --skip-columns=guid`)
 }
 
 console.log(`The local instance is now available at ${config.config.WP_SITEURL}`)

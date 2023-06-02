@@ -1,4 +1,4 @@
-const { run } = require('./lib/run')
+const { wp } = require('./lib/run')
 const { useDatabase } = require('./lib/mysql')
 
 // merge composer files
@@ -7,4 +7,4 @@ const { useDatabase } = require('./lib/mysql')
 // opt: switch DB
 
 useDatabase('planet4_dev')
-run('wp-env run cli theme activate planet4-master-theme')
+wp('theme activate planet4-master-theme')

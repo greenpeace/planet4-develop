@@ -6,7 +6,7 @@ const config = getConfig()
 
 run('wp-env stop')
 run('wp-env clean')
-if (config.appDir.length > 0 && !config.appDir.includes('..') && isDir(config.appDir)) {
-  console.log(`Deleting all files in <${config.appDir}> ...`)
-  run(`sudo rm -rf ${config.appDir}`)
+if (config.paths.local.app.length > 0 && !config.paths.local.app.includes('..') && isDir(config.paths.local.app)) {
+  console.log(`Deleting all files in <${config.paths.local.app}> ...`)
+  run(`rm -rf ./${config.paths.local.app}`)
 }

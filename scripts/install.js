@@ -1,7 +1,7 @@
 const { existsSync, mkdirSync } = require('fs')
-const { nodeCheck } = require('./lib/node-check')
+const { nodeCheck } = require('./lib/env-check')
 const { getConfig } = require('./lib/config')
-const { run } = require('./lib/run')
+const { run, composer, wp } = require('./lib/run')
 const { download } = require('./lib/download')
 const { getBaseRepoFromGit, getMainReposFromGit, installRepos, buildAssets } = require('./lib/main-repos')
 const { generateBaseComposerRequirements } = require('./lib/composer-requirements')
@@ -51,7 +51,7 @@ generateBaseComposerRequirements(config)
  * Install themes/plugins
  */
 console.log('Installing & activating plugins ...')
-run(`wp-env run composer -d /app/${config.appDir}/ update --ignore-platform-reqs`)
+composer('update', config.paths.container.app)
 installPluginsDependencies(config)
 
 /**
@@ -62,7 +62,7 @@ download(
   `https://storage.googleapis.com/planet4-default-content/${imagesDump}`,
   `content/${imagesDump}`
 )
-run(`unzip -qo content/${imagesDump} -d ${config.uploadsDir}`)
+run(`unzip -qo content/${imagesDump} -d ${config.paths.local.uploads}`)
 
 /**
  * Database
@@ -80,7 +80,7 @@ download(
 createDatabase(dbName)
 importDatabase(`content/${dbDump}`, dbName)
 useDatabase(dbName)
-run('wp-env run cli plugin activate --all')
-run('wp-env run cli user update admin --user_pass=admin --role=administrator')
+wp('plugin activate --all')
+wp('user update admin --user_pass=admin --role=administrator')
 
 console.log(`The local instance is now available at ${config.config.WP_SITEURL}`)

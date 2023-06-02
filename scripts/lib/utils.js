@@ -1,5 +1,5 @@
 const { existsSync, lstatSync, readdirSync, readFileSync, writeFileSync } = require('fs')
-const { run } = require('./run')
+const { run, composer } = require('./run')
 const yaml = require('js-yaml')
 
 function isDir (path) {
@@ -24,16 +24,17 @@ function cloneIfNotExists (path, repo) {
   run(`git clone ${repo} ${path}`)
 }
 
-function makeDirStructure ({ themesDir, pluginsDir, uploadsDir, languagesDir }) {
-  run(`mkdir -p ${themesDir} && mkdir -p ${pluginsDir} && mkdir -p ${uploadsDir} && mkdir -p ${languagesDir} && mkdir -p content`)
+function makeDirStructure (config) {
+  run('mkdir -p content')
+  Object.values(config.paths.local).forEach(dir => run(`mkdir -p ${dir}`))
 }
 
-function installPluginsDependencies ({ pluginsDir }) {
+function installPluginsDependencies (config) {
   const excluded = ['cmb2']
-  const files = readdirSync(pluginsDir)
+  const files = readdirSync(config.paths.local.plugins)
 
   files.forEach((file) => {
-    const path = `${pluginsDir}/${file}`
+    const path = `${config.paths.local.plugins}/${file}`
     if (excluded.includes(file)
       || !isDir(path)
       || !existsSync(`${path}/composer.json`)
@@ -42,15 +43,15 @@ function installPluginsDependencies ({ pluginsDir }) {
       return
     }
 
-    run(`wp-env run composer -d /app/${path} update -n --ignore-platform-reqs`)
+    composer('update -n', `${config.paths.container.plugins}/${file}`)
   })
 }
 
 function createHtaccess (config) {
   const htaccessTemplate = require('../.htaccess.tpl.js')
   const content = htaccessTemplate(config.nro?.imgBucket || null)
-  writeFileSync(`${config.appDir}/.htaccess`, content)
-  run(`docker compose -f $(wp-env install-path)/docker-compose.yml cp ${config.appDir}/.htaccess wordpress:/var/www/html/.htaccess`)
+  writeFileSync(`${config.paths.local.app}/.htaccess`, content)
+  run(`docker compose -f $(wp-env install-path)/docker-compose.yml cp ${config.paths.local.app}/.htaccess wordpress:/var/www/html/.htaccess`)
 }
 
 function readYaml (filePath) {

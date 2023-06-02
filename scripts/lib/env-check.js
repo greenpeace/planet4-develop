@@ -1,4 +1,5 @@
 const { readFileSync } = require('fs')
+const { runWithOutput } = require('./run')
 
 function nodeCheck () {
   const nodeVersionRequired = parseInt(readFileSync('.nvmrc'))
@@ -9,4 +10,12 @@ function nodeCheck () {
   }
 }
 
-module.exports = { nodeCheck }
+function wpenvCheck () {
+  const versionRequired = '8'
+  const versionRunning = runWithOutput('wp-env --version').split('.')[0]
+  if (versionRequired !== versionRunning) {
+    console.error(`\u001b[31m\u2717\u001b[0m This installation process requires wp-env version ${versionRequired}. Version <${versionRunning}> is not officially supported.`)
+  }
+}
+
+module.exports = { nodeCheck, wpenvCheck }
