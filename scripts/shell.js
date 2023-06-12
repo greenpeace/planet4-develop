@@ -11,5 +11,5 @@ if (shell === 'mysql') {
     ...wp('config get DB_NAME', { stdio: 'pipe' })
   ).trim()
 
-  run(`docker compose -f $(wp-env install-path)/docker-compose.yml exec mysql mysql -uroot -ppassword -D ${db}`)
+  run(`docker compose -f $(wp-env install-path)/docker-compose.yml exec mysql mariadb -uroot -ppassword -D ${db}`)
 }
