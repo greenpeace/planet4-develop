@@ -20,7 +20,7 @@ function runWithOutput (cmd, opts) {
 }
 
 function wpenvRun (cmd, cwd, opts = {}) {
-  run(
+  return run(
     cwd ? `wp-env run --env-cwd=${cwd} ${cmd}` : `wp-env run ${cmd}`,
     opts
   )
