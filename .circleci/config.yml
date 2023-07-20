@@ -80,16 +80,21 @@ jobs:
               npm -g i @wordpress/env@${WP_ENV_VERSION}
       - run:
           name: Install environment
+          environment:
+              VERBOSE: true
           command: |
               nvm use
               npm install
               npm run env:requirements
-              VERBOSE=true npm run env:install
+              npm run env:install
       - run:
           name: E2E tests
+          environment:
+              CI:
+              PW_RETRIES: 1
+              PW_WORKERS: 3
           command: |
               echo -e "\n# Planet4 local development environment\n127.0.0.1\twww.planet4.test" | sudo tee -a /etc/hosts;
-              export WP_BASE_URL="http://www.planet4.test"
               nvm use
               npm run env:e2e-install -- --with-deps
               npm run env:e2e
