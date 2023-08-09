@@ -87,6 +87,7 @@ jobs:
               npm install
               npm run env:requirements
               npm run env:install
+              npm run elastic:activate
       - run:
           name: E2E tests
           environment:

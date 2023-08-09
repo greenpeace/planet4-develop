@@ -11,11 +11,14 @@ if (args.command === 'activate') {
   run(`docker compose ${dcConfig} up --force-recreate -d elasticsearch`)
   wp('option update ep_host "http://elasticsearch:9200/"')
   wp('plugin activate elasticpress')
-  wp('elasticpress index --setup --yes')
-
-  // clear redis cache ?
-  wp('timber clear_cache &>/dev/null')
-  wp('cache flush')
+  setTimeout(
+    () => {
+      wp('elasticpress index --setup --quiet --url=localhost')
+      wp('timber clear_cache &>/dev/null')
+      wp('cache flush')
+    },
+    3000
+  )
 }
 
 if (args.command === 'deactivate') {
