@@ -13,10 +13,6 @@ function generateBaseComposerRequirements (config) {
   composer('config --unset repositories.0', config.paths.container.app)
   composer('config --unset extra.merge-plugin', config.paths.container.app)
   composer('config --json extra.installer-paths "{\\"plugins/{\\$name}/\\": [\\"type:wordpress-plugin\\"],\\"themes/{\\$name}/\\": [\\"type:wordpress-theme\\"]}"', config.paths.container.app)
-  // composer(`config platform.php "${config.phpVersion}"`, config.paths.container.app)
-  if (config?.planet4?.composer?.processTimeout) {
-    composer(`config process-timeout ${config.planet4.composer.processTimeout}`, config.paths.container.app)
-  }
 
   if (isDir(`${config.paths.local.themes}/planet4-master-theme`)) {
     composer('remove --no-update greenpeace/planet4-master-theme', config.paths.container.app)

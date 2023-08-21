@@ -59,11 +59,6 @@ function installRepos (config) {
   composer('install', `${config.paths.container.themes}/planet4-master-theme `)
   // composer(`config platform.php "${config.phpVersion}"`, `/app/${config.pluginsDir}/planet4-plugin-gutenberg-blocks`)
   composer('install', `${config.paths.container.plugins}/planet4-plugin-gutenberg-blocks`)
-
-  if (config?.planet4?.composer?.processTimeout) {
-    composer(`config process-timeout ${config.planet4.composer.processTimeout}`, `${config.paths.container.themes}/planet4-master-theme `)
-    composer(`config process-timeout ${config.planet4.composer.processTimeout}`, `${config.paths.container.plugins}/planet4-plugin-gutenberg-blocks`)
-  }
 }
 
 function installNpmDependencies (config) {
@@ -86,10 +81,17 @@ function buildAssets (config, force = false) {
   run('npm run build', { cwd: `${config.paths.local.plugins}/planet4-plugin-gutenberg-blocks` })
 }
 
+function setComposerConfig (config) {
+  if (config?.planet4?.composer?.processTimeout) {
+    composer(`config --global process-timeout ${config.planet4.composer.processTimeout}`, config.paths.container.app)
+  }
+}
+
 module.exports = {
   getBaseRepoFromGit,
   getMainReposFromGit,
   getMainReposFromRelease,
   buildAssets,
-  installRepos
+  installRepos,
+  setComposerConfig
 }
