@@ -17,6 +17,7 @@
     "env:destroy": "node ./scripts/clean.js && wp-env destroy",
     "env:e2e": "node ./scripts/e2e.js",
     "env:e2e-install": "node ./scripts/e2e.js install",
+    "env:htaccess": "node ./scripts/htaccess.js",
     "nro:install": "node ./scripts/nro-install.js",
     "nro:enable": "node ./scripts/nro-enable.js",
     "nro:disable": "node ./scripts/nro-disable.js",
@@ -31,7 +32,8 @@
     "shell:php": "node ./scripts/shell.js php",
     "shell:mysql": "node ./scripts/shell.js mysql",
     "lint": "eslint",
-    "test": "mocha --reporter mocha-junit-reporter --reporter-options mochaFile=junit.xml"
+    "test": "mocha --reporter mocha-junit-reporter --reporter-options mochaFile=junit.xml",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "eslint": "8.35.0",
@@ -39,10 +41,15 @@
     "eslint-plugin-import": "2.27.5",
     "eslint-plugin-n": "15.6.1",
     "eslint-plugin-promise": "6.1.1",
+    "husky": "8.0.3",
+    "lint-staged": "14.0.1",
     "mocha": "10.2.0",
     "mocha-junit-reporter": "2.2.0"
   },
   "dependencies": {
     "js-yaml": "4.1.0"
+  },
+  "lint-staged": {
+    "*.js": "npm run lint -- --fix"
   }
 }

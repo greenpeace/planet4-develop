@@ -3,10 +3,11 @@ ${nroBucket ? `
 # BEGIN Reverse proxy
 
 RewriteEngine On
-RewriteBase /wp-content/uploads
+RewriteRule ^static/${nroBucket}/(.*)$ http://www.greenpeace.org/static/${nroBucket}/$1 [R=301,L]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^wp-content/uploads(.*)$ http://www.greenpeace.org/static/${nroBucket}/$1 [R=301,L]
+RewriteRule ^wp-content/uploads/(.*)$ http://www.greenpeace.org/static/${nroBucket}/$1 [R=301,L]
 
 # END Reverse proxy
 ` : ''}
