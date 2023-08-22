@@ -36,4 +36,4 @@ wpenvCheck()
 const nvmPath = process.env.NVM_DIR ? `${process.env.NVM_DIR}/nvm.sh` : '~/.nvm/nvm.sh'
 check(`. ${nvmPath} && nvm --version`, 'nvm version:', `${redCross} Not found (nvm path used: ${nvmPath}). Please install NVM.`)
 check('curl --version', 'curl version:', `${redCross} Not found. Please install Curl.`)
-check('gsutil version', 'gsutil version:', `${orangeCross} Not found. Install gsutil only if you want to import NRO database.`)
+check('gcloud version', 'gcloud version:', `${orangeCross} Not found. Install gcloud only if you want to import NRO database.`)

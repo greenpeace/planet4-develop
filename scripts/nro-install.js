@@ -102,20 +102,37 @@ if (databaseExists(config.nro.db)) {
   process.exit(0)
 }
 
-// Create and import database
-createDatabase(config.nro.db)
-const dumpList = runWithOutput(`gsutil ls -rl "gs://${config.nro.dbBucket}/**" | sort -k2`).split(/\r?\n/)
-const dumpUrl = dumpList[dumpList.length - 2].trim().split('  ')[2] || null
-if (dumpUrl) {
-  console.log(`Dump found: ${dumpUrl}`)
-  const dumpName = basename(dumpUrl)
-  run(`gsutil cp ${dumpUrl} content/`)
-  importDatabase(`content/${dumpName}`, config.nro.db)
-  useDatabase(config.nro.db)
+// Control gcloud login
+try {
+  const gcloudID = runWithOutput('gcloud auth list --filter=status:ACTIVE --format="value(account)" --verbosity="error"')
+  if (!gcloudID.trim()) {
+    console.log('\n', 'Gcloud account not logged in, skipping NRO database import.', '\n')
+  } else {
+    const dumpList = runWithOutput(`gcloud storage ls -r -l "gs://${config.nro.dbBucket}/**" | sort -k2`).split(/\r?\n/)
+    const dumpUrl = dumpList[dumpList.length - 2].trim().split('  ')[2] || null
+    if (dumpUrl) {
+      // Create and import database
+      createDatabase(config.nro.db)
+      console.log(`Dump found: ${dumpUrl}`)
+      const dumpName = basename(dumpUrl)
+      run(`gcloud storage cp ${dumpUrl} content/`)
+      importDatabase(`content/${dumpName}`, config.nro.db)
+      useDatabase(config.nro.db)
+    }
+  }
+} catch (error) {
+  console.log('Error trying to import NRO database.')
+  if (process.env.VERBOSE) {
+    console.log(error)
+  }
 }
 
 // Create/update admin user
-wp('user update admin --user_pass=admin --role=administrator')
+try {
+  wp('user create admin admin@planet4.test --user_pass=admin --role=administrator')
+} catch (error) {
+  wp('user update admin --user_pass=admin --role=administrator')
+}
 if (themeName) {
   wp(`theme activate ${themeName}`)
 }

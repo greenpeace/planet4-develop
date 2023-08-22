@@ -81,6 +81,10 @@ createDatabase(dbName)
 importDatabase(`content/${dbDump}`, dbName)
 useDatabase(dbName)
 wp('plugin activate --all')
-wp('user update admin --user_pass=admin --role=administrator')
+try {
+  wp('user create admin admin@planet4.test --user_pass=admin --role=administrator')
+} catch (error) {
+  wp('user update admin --user_pass=admin --role=administrator')
+}
 
 console.log(`The local instance is now available at ${config.config.WP_SITEURL}`)
