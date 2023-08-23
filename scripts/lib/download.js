@@ -11,7 +11,7 @@ function download (src, dest, force = false) {
 }
 
 function downloadFromGcloud (src, dest) {
-  run(`gsutil cp ${src} ${dest}`)
+  run(`gcloud storage cp ${src} ${dest}`)
 }
 
 module.exports = {

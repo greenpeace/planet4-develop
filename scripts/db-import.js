@@ -3,7 +3,7 @@ const { wp } = require('./lib/run')
 const { createDatabase, importDatabase, useDatabase } = require('./lib/mysql')
 
 if (!process.argv[2] || !process.argv[3]) {
-  console.log('Please use npm run db:import <gz file path> <dataase name>')
+  console.log('Please use npm run db:import <gz file path> <database name>')
   process.exit(1)
 }
 
@@ -23,4 +23,8 @@ if (!dbName.match(/^[a-z0-9_]*$/)) {
 createDatabase(dbName)
 importDatabase(filepath, dbName)
 useDatabase(dbName)
-wp('user update admin --user_pass=admin --role=administrator')
+try {
+  wp('user create admin admin@planet4.test --user_pass=admin --role=administrator')
+} catch (error) {
+  wp('user update admin --user_pass=admin --role=administrator')
+}
