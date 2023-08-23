@@ -1,6 +1,7 @@
 const { existsSync, lstatSync, readdirSync, readFileSync, writeFileSync } = require('fs')
 const { run, composer } = require('./run')
 const yaml = require('js-yaml')
+const os = require('os')
 
 function isDir (path) {
   return existsSync(path) && lstatSync(path).isDirectory()
@@ -86,6 +87,19 @@ function parseArgs (args, def) {
   return parsed
 }
 
+// Cf. https://github.com/WordPress/gutenberg/blob/trunk/packages/env/lib/get-host-user.js
+function getHostUser () {
+  const hostUser = os.userInfo()
+  const uid = (hostUser.uid === -1 ? 1000 : hostUser.uid).toString()
+  const gid = (hostUser.gid === -1 ? 1000 : hostUser.gid).toString()
+  return {
+    name: hostUser.username,
+    uid,
+    gid,
+    fullUser: uid + ':' + gid
+  }
+}
+
 module.exports = {
   isDir,
   isRepo,
@@ -94,5 +108,6 @@ module.exports = {
   installPluginsDependencies,
   createHtaccess,
   readYaml,
-  parseArgs
+  parseArgs,
+  getHostUser
 }

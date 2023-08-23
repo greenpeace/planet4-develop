@@ -1,8 +1,13 @@
 const { run, wp } = require('./lib/run')
+const { getHostUser } = require('./lib/utils')
 
 const shell = process.argv[2] || 'php'
 
 if (shell === 'php') {
+  run(`docker compose -f $(wp-env install-path)/docker-compose.yml exec --user ${getHostUser().fullUser} wordpress bash`)
+}
+
+if (shell === 'php:root') {
   run('docker compose -f $(wp-env install-path)/docker-compose.yml exec wordpress bash')
 }
 
