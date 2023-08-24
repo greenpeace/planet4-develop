@@ -44,5 +44,5 @@ if (isRepo(`${config.paths.local.themes}/planet4-master-theme`)
 // default images
 // default DB
 
-run('wp-env stop || true')
-run('wp-env start --update')
+run('npx wp-env stop || true')
+run('npx wp-env start --update')

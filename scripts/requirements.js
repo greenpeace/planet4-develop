@@ -30,7 +30,7 @@ nodeCheck()
 check('docker --version', 'Docker version:', `${redCross} Not found. Please install Docker.`)
 check('docker compose version', 'Docker compose version:', `${redCross} Not found. Please install or activate Docker compose v2.`)
 
-check('wp-env --version', 'wp-env version:', `${redCross} Not found. Please install wp-env.`)
+check('npx wp-env --version', 'wp-env version:', `${redCross} Not found. Please install wp-env.`)
 wpenvCheck()
 
 const nvmPath = process.env.NVM_DIR ? `${process.env.NVM_DIR}/nvm.sh` : '~/.nvm/nvm.sh'

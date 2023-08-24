@@ -52,7 +52,7 @@ function createHtaccess (config) {
   const htaccessTemplate = require('../.htaccess.tpl.js')
   const htaccess = htaccessTemplate(config.nro?.imgBucket || null)
   writeFileSync('content/.htaccess', htaccess)
-  run('docker compose -f $(wp-env install-path)/docker-compose.yml cp content/.htaccess wordpress:/var/www/html/.htaccess')
+  run('docker compose -f $(npx wp-env install-path)/docker-compose.yml cp content/.htaccess wordpress:/var/www/html/.htaccess')
 }
 
 function readYaml (filePath) {

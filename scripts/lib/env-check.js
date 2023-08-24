@@ -12,7 +12,7 @@ function nodeCheck () {
 
 function wpenvCheck () {
   const versionRequired = '8'
-  const versionRunning = runWithOutput('wp-env --version').split('.')[0]
+  const versionRunning = runWithOutput('npx wp-env --version').split('.')[0]
   if (versionRequired !== versionRunning) {
     console.error(`\u001b[31m\u2717\u001b[0m This installation process requires wp-env version ${versionRequired}. Version <${versionRunning}> is not officially supported.`)
   }

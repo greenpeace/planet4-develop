@@ -5,7 +5,7 @@ const { parseArgs } = require('./lib/utils')
  * Main
  */
 const args = parseArgs(process.argv, { command: 'activate' })
-const dcConfig = '-f $(wp-env install-path)/docker-compose.yml -f scripts/docker-compose.p4.yml'
+const dcConfig = '-f $(npx wp-env install-path)/docker-compose.yml -f scripts/docker-compose.p4.yml'
 
 if (args.command === 'activate') {
   run(`docker compose ${dcConfig} up --force-recreate -d elasticsearch`)

@@ -11,11 +11,11 @@ function mysqlRootExecNoTTY (cmd, opts) {
 };
 
 function mysqlRootCommand (cmd) {
-  return `docker compose -f $(wp-env install-path)/docker-compose.yml exec mysql mariadb -uroot -ppassword ${cmd}`
+  return `docker compose -f $(npx wp-env install-path)/docker-compose.yml exec mysql mariadb -uroot -ppassword ${cmd}`
 };
 
 function mysqlRootCommandNoTTY (cmd) {
-  return `docker compose -f $(wp-env install-path)/docker-compose.yml exec -T mysql mariadb -uroot -ppassword ${cmd}`
+  return `docker compose -f $(npx wp-env install-path)/docker-compose.yml exec -T mysql mariadb -uroot -ppassword ${cmd}`
 };
 
 function createDatabase (dbName) {

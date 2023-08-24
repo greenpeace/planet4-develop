@@ -6,15 +6,15 @@
   "scripts": {
     "env:requirements": "node ./scripts/requirements.js",
     "env:install": "node ./scripts/install.js",
-    "env:start": "wp-env start",
-    "env:stop": "wp-env stop",
+    "env:start": "npx wp-env start",
+    "env:stop": "npx wp-env stop",
     "env:config": "node ./scripts/config.js",
     "env:fix-permissions": "node ./scripts/fix-permissions.js",
     "env:update": "node ./scripts/update.js",
-    "env:status": "docker compose -f $(wp-env install-path)/docker-compose.yml -f scripts/docker-compose.p4.yml ps --all",
+    "env:status": "docker compose -f $(npx wp-env install-path)/docker-compose.yml -f scripts/docker-compose.p4.yml ps --all",
     "env:clean-repos": "node ./scripts/clean-repos.js",
     "env:clean": "node ./scripts/clean.js",
-    "env:destroy": "node ./scripts/clean.js && wp-env destroy",
+    "env:destroy": "node ./scripts/clean.js && npx wp-env destroy",
     "env:e2e": "node ./scripts/e2e.js",
     "env:e2e-install": "node ./scripts/e2e.js install",
     "env:htaccess": "node ./scripts/htaccess.js",
@@ -49,6 +49,7 @@
     "mocha-junit-reporter": "2.2.0"
   },
   "dependencies": {
+    "@wordpress/env": "8.6.0",
     "js-yaml": "4.1.0"
   },
   "lint-staged": {
