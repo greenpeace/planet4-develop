@@ -1,7 +1,7 @@
 const { nodeCheck } = require('./lib/env-check')
 const { getConfig } = require('./lib/config')
 const { run, runWithOutput, composer, wp } = require('./lib/run')
-const { getBaseRepoFromGit, getMainReposFromRelease, installRepos } = require('./lib/main-repos')
+const { getBaseRepoFromGit, getMainReposFromRelease, installRepos, setComposerConfig } = require('./lib/main-repos')
 const { generateBaseComposerRequirements, generateNROComposerRequirements } = require('./lib/composer-requirements')
 const { createHtaccess, makeDirStructure, cloneIfNotExists, readYaml } = require('./lib/utils')
 const { createDatabase, importDatabase, databaseExists, useDatabase } = require('./lib/mysql')
@@ -36,6 +36,7 @@ createHtaccess(config)
 /**
  * Install main repos
  */
+setComposerConfig(config)
 console.log('Cloning base repo ...')
 getBaseRepoFromGit(config)
 
