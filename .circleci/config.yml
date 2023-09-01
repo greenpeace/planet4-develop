@@ -65,8 +65,6 @@ jobs:
   env-install:
     machine:
       image: ubuntu-2204:2023.02.1
-    environment:
-      - WP_ENV_VERSION: "8.0.0"
     parameters:
       notify:
         type: boolean
@@ -77,7 +75,6 @@ jobs:
           name: Install dependencies
           command: |
               nvm install 16
-              npm -g i @wordpress/env@${WP_ENV_VERSION}
       - run:
           name: Install environment
           environment:
@@ -126,7 +123,6 @@ jobs:
       image: ubuntu-2204:2023.02.1
     environment:
       - GOOGLE_PROJECT_ID: planet-4-151612
-      - WP_ENV_VERSION: "8.0.0"
     parameters:
       notify:
         type: boolean
@@ -138,7 +134,6 @@ jobs:
           name: Install dependencies
           command: |
               nvm install 16
-              npm -g i @wordpress/env@${WP_ENV_VERSION}
       - run:
           name: Install environment
           command: |

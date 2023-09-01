@@ -21,7 +21,7 @@ function runWithOutput (cmd, opts) {
 
 function wpenvRun (cmd, cwd, opts = {}) {
   return run(
-    cwd ? `wp-env run --env-cwd=${cwd} ${cmd}` : `wp-env run ${cmd}`,
+    cwd ? `npx wp-env run --env-cwd=${cwd} ${cmd}` : `npx wp-env run ${cmd}`,
     opts
   )
 }

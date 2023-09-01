@@ -29,8 +29,8 @@ if (!config.nro) {
  * Start WP
  */
 makeDirStructure(config)
-run('wp-env stop || true')
-run('wp-env start')
+run('npx wp-env stop || true')
+run('npx wp-env start')
 createHtaccess(config)
 
 /**
