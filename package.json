@@ -1,6 +1,6 @@
 {
   "name": "planet4-develop",
-  "version": "v0.7",
+  "version": "0.7.1",
   "description": "Planet 4 development environment",
   "author": "Planet 4",
   "scripts": {
