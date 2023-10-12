@@ -64,7 +64,7 @@ function installRepos (config) {
 function installNpmDependencies (config) {
   process.env.PUPPETEER_SKIP_DOWNLOAD = true
   process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true
-  run('npm install', { cwd: `${config.paths.local.themes}/planet4-master-theme` })
+  run('npm install --legacy-peer-deps', { cwd: `${config.paths.local.themes}/planet4-master-theme` })
   run('npm install', { cwd: `${config.paths.local.plugins}/planet4-plugin-gutenberg-blocks` })
 }
 
