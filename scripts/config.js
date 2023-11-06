@@ -1,3 +1,3 @@
-const { getConfig } = require('./lib/config')
+const {getConfig} = require('./lib/config');
 
-console.log(getConfig())
+console.log(getConfig());

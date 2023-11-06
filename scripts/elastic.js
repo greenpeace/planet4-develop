@@ -1,32 +1,32 @@
-const { run, wp } = require('./lib/run')
-const { parseArgs } = require('./lib/utils')
+const {run, wp} = require('./lib/run');
+const {parseArgs} = require('./lib/utils');
 
 /**
  * Main
  */
-const args = parseArgs(process.argv, { command: 'activate' })
-const dcConfig = '-f $(npx wp-env install-path)/docker-compose.yml -f scripts/docker-compose.p4.yml'
+const args = parseArgs(process.argv, {command: 'activate'});
+const dcConfig = '-f $(npx wp-env install-path)/docker-compose.yml -f scripts/docker-compose.p4.yml';
 
 if (args.command === 'activate') {
-  run(`docker compose ${dcConfig} up --force-recreate -d elasticsearch`)
-  wp('option update ep_host "http://elasticsearch:9200/"')
-  wp('plugin activate elasticpress')
+  run(`docker compose ${dcConfig} up --force-recreate -d elasticsearch`);
+  wp('option update ep_host "http://elasticsearch:9200/"');
+  wp('plugin activate elasticpress');
   setTimeout(
     () => {
-      wp('elasticpress index --setup --quiet --url=localhost')
-      wp('timber clear_cache &>/dev/null')
-      wp('cache flush')
+      wp('elasticpress index --setup --quiet --url=localhost');
+      wp('timber clear_cache &>/dev/null');
+      wp('cache flush');
     },
     3000
-  )
+  );
 }
 
 if (args.command === 'deactivate') {
-  run(`docker compose ${dcConfig} stop elasticsearch`)
-  wp('plugin deactivate elasticpress')
+  run(`docker compose ${dcConfig} stop elasticsearch`);
+  wp('plugin deactivate elasticpress');
 }
 
 if (args.command === 'stop') {
-  run(`docker compose ${dcConfig} stop elasticsearch`)
-  wp('option delete ep_host')
+  run(`docker compose ${dcConfig} stop elasticsearch`);
+  wp('option delete ep_host');
 }
