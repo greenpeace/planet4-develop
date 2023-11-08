@@ -25,7 +25,7 @@ jobs:
           name: Lint
           command: |
             npm install
-            npm run lint -- scripts
+            npx eslint scripts
 
   unit-test:
     docker:

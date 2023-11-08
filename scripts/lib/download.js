@@ -1,20 +1,20 @@
-const { existsSync } = require('fs')
-const { run } = require('./run')
+const {existsSync} = require('fs');
+const {run} = require('./run');
 
-function download (src, dest, force = false) {
+function download(src, dest, force = false) {
   if (!force && existsSync(dest)) {
-    console.log(`${dest} already exists.`)
-    return
+    console.log(`${dest} already exists.`);
+    return;
   }
 
-  run(`curl -L --fail ${src} > ${dest}`)
+  run(`curl -L --fail ${src} > ${dest}`);
 }
 
 function downloadFromGcloud (src, dest) {
-  run(`gcloud storage cp ${src} ${dest}`)
+  run(`gcloud storage cp ${src} ${dest}`);
 }
 
 module.exports = {
   download,
-  downloadFromGcloud
-}
+  downloadFromGcloud,
+};

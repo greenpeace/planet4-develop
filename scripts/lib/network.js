@@ -1,13 +1,13 @@
-const { run } = require('./run')
+const {run} = require('./run');
 
 function getCurrentNetwork () {
   const network = JSON.parse(String.fromCharCode(
-    ...run('docker network ls --format=json --filter name=$(basename $(npx wp-env install-path))', { stdio: 'pipe' })
-  ).trim())
+    ...run('docker network ls --format=json --filter name=$(basename $(npx wp-env install-path))', {stdio: 'pipe'})
+  ).trim());
 
-  console.log(network)
+  console.log(network);
 
-  return network.Name || null
+  return network.Name || null;
 }
 
-module.exports = { getCurrentNetwork }
+module.exports = {getCurrentNetwork};

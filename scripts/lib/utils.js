@@ -1,103 +1,104 @@
-const { existsSync, lstatSync, readdirSync, readFileSync, writeFileSync } = require('fs')
-const { run, composer } = require('./run')
-const yaml = require('js-yaml')
-const os = require('os')
+const {existsSync, lstatSync, readdirSync, readFileSync, writeFileSync} = require('fs');
+const {run, composer} = require('./run');
+const yaml = require('js-yaml');
+const os = require('os');
 
-function isDir (path) {
-  return existsSync(path) && lstatSync(path).isDirectory()
+function isDir(path) {
+  return existsSync(path) && lstatSync(path).isDirectory();
 }
 
-function isRepo (path) {
-  return isDir(path) && existsSync(`${path}/.git/info`)
+function isRepo(path) {
+  return isDir(path) && existsSync(`${path}/.git/info`);
 }
 
-function cloneIfNotExists (path, repo) {
+function cloneIfNotExists(path, repo) {
   if (isRepo(path)) {
-    run('git status', { cwd: path })
-    return
+    run('git status', {cwd: path});
+    return;
   }
 
   if (isDir(path)) {
-    console.log(`<${path}> is not a repository.`)
-    return
+    console.log(`<${path}> is not a repository.`);
+    return;
   }
 
-  run(`git clone ${repo} ${path}`)
+  run(`git clone ${repo} ${path}`);
 }
 
-function makeDirStructure (config) {
-  run('mkdir -p content')
-  Object.values(config.paths.local).forEach(dir => run(`mkdir -p ${dir}`))
+function makeDirStructure(config) {
+  run('mkdir -p content');
+  Object.values(config.paths.local).forEach(dir => run(`mkdir -p ${dir}`));
 }
 
-function installPluginsDependencies (config) {
-  const excluded = ['cmb2']
-  const files = readdirSync(config.paths.local.plugins)
+function installPluginsDependencies(config) {
+  const excluded = ['cmb2'];
+  const files = readdirSync(config.paths.local.plugins);
 
-  files.forEach((file) => {
-    const path = `${config.paths.local.plugins}/${file}`
-    if (excluded.includes(file)
-      || !isDir(path)
-      || !existsSync(`${path}/composer.json`)
-      || isDir(`${path}/vendor`)
+  files.forEach(file => {
+    const path = `${config.paths.local.plugins}/${file}`;
+    if (
+      excluded.includes(file) ||
+			!isDir(path) ||
+			!existsSync(`${path}/composer.json`) ||
+			isDir(`${path}/vendor`)
     ) {
-      return
+      return;
     }
 
-    composer('update -n', `${config.paths.container.plugins}/${file}`)
-  })
+    composer('update -n', `${config.paths.container.plugins}/${file}`);
+  });
 }
 
 function createHtaccess (config) {
-  const htaccessTemplate = require('../.htaccess.tpl.js')
-  const htaccess = htaccessTemplate(config.nro?.imgBucket || null)
-  writeFileSync('content/.htaccess', htaccess)
-  run('docker compose -f $(npx wp-env install-path)/docker-compose.yml cp content/.htaccess wordpress:/var/www/html/.htaccess')
+  const htaccessTemplate = require('../.htaccess.tpl.js');
+  const htaccess = htaccessTemplate(config.nro?.imgBucket || null);
+  writeFileSync('content/.htaccess', htaccess);
+  run('docker compose -f $(npx wp-env install-path)/docker-compose.yml cp content/.htaccess wordpress:/var/www/html/.htaccess');
 }
 
-function readYaml (filePath) {
+function readYaml(filePath) {
   try {
-    const fileContent = readFileSync(filePath, 'utf8')
-    const parsedYaml = yaml.load(fileContent)
-    return parsedYaml
+    const fileContent = readFileSync(filePath, 'utf8');
+    const parsedYaml = yaml.load(fileContent);
+    return parsedYaml;
   } catch (err) {
-    console.error('Error reading or parsing YAML:', err)
-    return null
+    console.error('Error reading or parsing YAML:', err);
+    return null;
   }
 }
 
-function parseArgs (args, def) {
-  const interpreter = args.shift()
-  const script = args.shift()
-  const options = args.filter(v => v.startsWith('--'))
-  const commands = args.filter(v => !options.includes(v))
-  const command = commands[0] || def?.command || null
+function parseArgs(args, def) {
+  const interpreter = args.shift();
+  const script = args.shift();
+  const options = args.filter(v => v.startsWith('--'));
+  const commands = args.filter(v => !options.includes(v));
+  const command = commands[0] || def?.command || null;
 
   const parsed = {
     interpreter,
     script,
     command,
-    options
-  }
+    options,
+  };
 
   if (process.env.VERBOSE) {
-    console.log(parsed)
+    console.log(parsed);
   }
 
-  return parsed
+  return parsed;
 }
 
 // Cf. https://github.com/WordPress/gutenberg/blob/trunk/packages/env/lib/get-host-user.js
 function getHostUser () {
-  const hostUser = os.userInfo()
-  const uid = (hostUser.uid === -1 ? 1000 : hostUser.uid).toString()
-  const gid = (hostUser.gid === -1 ? 1000 : hostUser.gid).toString()
+  const hostUser = os.userInfo();
+  const uid = (hostUser.uid === -1 ? 1000 : hostUser.uid).toString();
+  const gid = (hostUser.gid === -1 ? 1000 : hostUser.gid).toString();
   return {
     name: hostUser.username,
     uid,
     gid,
-    fullUser: uid + ':' + gid
-  }
+    fullUser: uid + ':' + gid,
+  };
 }
 
 module.exports = {
@@ -109,5 +110,5 @@ module.exports = {
   createHtaccess,
   readYaml,
   parseArgs,
-  getHostUser
-}
+  getHostUser,
+};

@@ -1,0 +1,26 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../planet4/themes/planet4-master-theme"
+		},
+		{
+			"path": "../../planet4/plugins/planet4-plugin-gutenberg-blocks"
+		},
+		{
+			"path": "../../../planet4-dashdash"
+		},
+		{
+			"path": "../../../planet4-design-tokens"
+		},
+		{
+			"path": "../../planet4/plugins/planet4-plugin-medialibrary"
+		},
+		{
+			"path": "../../planet4/themes/planet4-child-theme-argentina"
+		}
+	],
+	"settings": {}
+}

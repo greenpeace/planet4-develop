@@ -33,11 +33,12 @@
     "shell:php": "node ./scripts/shell.js php",
     "shell:php:root": "node ./scripts/shell.js php:root",
     "shell:mysql": "node ./scripts/shell.js mysql",
-    "lint": "eslint",
+    "lint": "npx eslint scripts --fix",
     "test": "mocha --reporter mocha-junit-reporter --reporter-options mochaFile=junit.xml",
     "prepare": "husky install"
   },
   "devDependencies": {
+    "@wordpress/eslint-plugin": "17.2.0",
     "eslint": "8.35.0",
     "eslint-config-standard": "17.0.0",
     "eslint-plugin-import": "2.27.5",
