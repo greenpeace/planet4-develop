@@ -1,0 +1,10 @@
+{
+  "config": {
+    "WP_APP_ENV": "local",
+    "WP_CACHE": false,
+    "WP_DEBUG": false,
+    "WP_DEBUG_LOG": true,
+    "SCRIPT_DEBUG": true,
+    "QM_ENABLE_CAPS_PANEL": true
+  }
+}
