@@ -55,6 +55,12 @@ composer('update', config.paths.container.app);
 installPluginsDependencies(config);
 
 /**
+ * Install development requirements
+ */
+console.log('Installing development requirements ...');
+run('cp -n .wp-env.override.json.dist .wp-env.override.json');
+
+/**
  * Images
  */
 const imagesDump = `planet4-default-content-${config.planet4.content.images}-images.zip`;
@@ -75,6 +81,7 @@ importDefaultContent(config.planet4.content.db);
  */
 wp('plugin activate --all');
 wp('plugin deactivate elasticpress');
+run('npx wp-env run cli wp plugin install query-monitor');
 
 console.log(
   `The local instance is now available at ${config.config.WP_SITEURL}`
