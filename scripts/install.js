@@ -85,7 +85,7 @@ wp('plugin activate --all');
 try {
   wp('user create admin admin@planet4.test --user_pass=admin --role=administrator');
 } catch (error) {
-  wp('user update admin --user_pass=admin --role=administrator');
+  wp('user update admin --user_pass=admin --user_email=admin@planet4.test --role=administrator');
 }
 
 console.log(

@@ -38,7 +38,6 @@ function generateBaseComposerRequirements(config) {
   const baseComposerConfig = JSON.parse(
     readFileSync(`${config.paths.local.app}/composer.json`)
   );
-  console.log('baseComposerConfig', baseComposerConfig);
   if (baseComposerConfig?.repositories) {
     for (const k in baseComposerConfig.repositories) {
       if (
@@ -53,10 +52,14 @@ function generateBaseComposerRequirements(config) {
     }
   }
 
-  writeFileSync(
-    `${config.paths.local.app}/composer.json`,
-    JSON.stringify(baseComposerConfig, null, '  ')
-  );
+  for (const [repo, branch] of Object.entries(config.planet4.repos)) {
+    if (baseComposerConfig.require[repo]) {
+      baseComposerConfig.require[repo] = branch;
+    }
+  }
+  console.log('baseComposerConfig', baseComposerConfig);
+
+  writeFileSync(`${config.paths.local.app}/composer.json`, JSON.stringify(baseComposerConfig, null, '  '));
   return baseComposerConfig;
 }
 
@@ -78,7 +81,7 @@ function generateNROComposerRequirements(config) {
     },
   };
   const composerConfig = {...baseComposerConfig, ...merged};
-  // @todo: resolve composer scripts and/or `wp` usage from composer container
+
   writeFileSync(
     `${config.paths.local.app}/composer.json`,
     JSON.stringify(composerConfig, null, '  ')

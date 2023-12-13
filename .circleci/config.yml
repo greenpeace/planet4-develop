@@ -80,11 +80,13 @@ jobs:
           environment:
               VERBOSE: true
           command: |
+              echo '{"config": {"WP_DEBUG": false}}' | tee -a .wp-env.override.json
               nvm use
               npm install
               npm run env:requirements
               npm run env:install
               npm run elastic:activate
+              npx wp-env run cli wp rewrite flush
       - run:
           name: E2E tests
           environment:
