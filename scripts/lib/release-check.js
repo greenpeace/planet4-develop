@@ -18,15 +18,8 @@ function getLocalBranch() {
   return execSync('git branch --show-current', {encoding: 'utf8'}).trim();
 }
 
-function fetchLatestReleaseInfo() {
+function fetchHelper(options) {
   return new Promise((resolve, reject) => {
-    const options = {
-      hostname: 'api.github.com',
-      path: `/repos/${user}/${repo}/releases/latest`,
-      method: 'GET',
-      headers: {'User-Agent': 'Planet 4 dev env'},
-    };
-
     https
       .get(options, res => {
         let data = '';
@@ -43,6 +36,24 @@ function fetchLatestReleaseInfo() {
         reject(err);
       });
   });
+}
+
+function fetchGithub(subpath) {
+  const options = {
+    hostname: 'api.github.com',
+    path: `/repos/${user}/${repo}${subpath}`,
+    method: 'GET',
+    headers: {'User-Agent': 'Planet 4 dev env'},
+  };
+  return fetchHelper(options);
+}
+
+function fetchLatestReleaseInfo() {
+  return fetchGithub('/releases/latest');
+}
+
+function fetchLatestUpstreamMainCommit() {
+  return fetchGithub('/branches/main');
 }
 
 function compareVersions(versionA, versionB) {
@@ -67,34 +78,49 @@ function compareVersions(versionA, versionB) {
   return 0;
 }
 
-function checkForNewRelease() {
-  const releaseInfo = fetchLatestReleaseInfo().catch(err => {
-    console.error('Error fetching release information:', err.message);
+async function checkForNewRelease({
+  greenCheck, orangeCross, redCross,
+}) {
+  console.log('Inspecting your checked-out code:');
+
+  const releaseInfo = await fetchLatestReleaseInfo().catch(err => {
+    console.error(`${redCross} Error fetching release information: ${err.message}`);
+  });
+  const upstreamCommitInfo = await fetchLatestUpstreamMainCommit().catch(err => {
+    console.error(`${redCross} Error fetching remote commit information: ${err.message}`);
   });
 
-  releaseInfo.then(info => {
-    const latestVersion = info.tag_name;
-    const localVersion = getLocalVersion();
+  const info = releaseInfo;
+  const latestVersion = info.tag_name;
+  const localVersion = getLocalVersion();
 
-    if (compareVersions(localVersion, latestVersion) === -1) {
-      console.log(
-        `\nNew Planet 4 developer environment release available: ${latestVersion}`
-      );
-      console.log('You should update !');
-    }
+  if (compareVersions(localVersion, latestVersion) === -1) {
+    console.log(
+      `\nNew Planet 4 developer environment release available: ${latestVersion}`
+    );
+    console.log(`${orangeCross} You should update !`);
+  }
 
-    const latestCommitHash = info.target_commitish;
-    const localCommitHash = getLocalCommitHash();
+  const latestCommitHash = upstreamCommitInfo.commit.sha;
+  const localCommitHash = getLocalCommitHash();
 
-    if (
-      getLocalBranch() === 'main' &&
-			localCommitHash !== latestCommitHash
-    ) {
-      console.log(
-        `\nYour local commit (${localCommitHash}) does not match the latest release commit (${latestCommitHash})`
-      );
-    }
-  });
+  if (
+    getLocalBranch() === 'main' &&
+    localCommitHash !== latestCommitHash
+  ) {
+    console.log(
+      `\n${orangeCross} Your local commit (${localCommitHash}) does not match the latest "main" commit (${latestCommitHash})`
+    );
+    const infoColor = '\u001b[34m'; // blue color code
+    const resetColor = '\u001b[0m'; // reset color code
+    const startBold = '\x1b[1m';
+    const endBold = '\x1b[0m';
+    const infoIcon = '\u2139';
+    const helpText = 'You may want to update your local commit by running "git pull"';
+    console.log(`➞ ${infoColor}${startBold} ${infoIcon} ${helpText} ${endBold}${resetColor}`);
+  } else {
+    console.log(`${greenCheck} Your checked out code is up to date!`);
+  }
 }
 
 module.exports = {checkForNewRelease};
