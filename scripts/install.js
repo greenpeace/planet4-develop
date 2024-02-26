@@ -82,6 +82,7 @@ createDatabase(dbName);
 importDatabase(`content/${dbDump}`, dbName);
 useDatabase(dbName);
 wp('plugin activate --all');
+wp('plugin deactivate elasticpress');
 try {
   wp('user create admin admin@planet4.test --user_pass=admin --role=administrator');
 } catch (error) {
