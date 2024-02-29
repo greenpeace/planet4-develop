@@ -25,6 +25,7 @@
     "build:assets": "node ./scripts/build-assets.js",
     "build:repos": "node ./scripts/build-repos.js",
     "db:import": "node ./scripts/db-import.js",
+    "db:reset": "node ./scripts/db-reset.js",
     "db:use": "node ./scripts/db-use.js",
     "elastic:activate": "node ./scripts/elastic.js activate",
     "elastic:deactivate": "node ./scripts/elastic.js deactivate",

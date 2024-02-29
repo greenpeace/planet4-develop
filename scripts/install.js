@@ -1,11 +1,10 @@
-const {existsSync, mkdirSync} = require('fs');
 const {nodeCheck} = require('./lib/env-check');
 const {getConfig} = require('./lib/config');
 const {run, composer, wp} = require('./lib/run');
 const {download} = require('./lib/download');
 const {getBaseRepoFromGit, getMainReposFromGit, installRepos, buildAssets, setComposerConfig} = require('./lib/main-repos');
 const {generateBaseComposerRequirements} = require('./lib/composer-requirements');
-const {createDatabase, importDatabase, useDatabase} = require('./lib/mysql');
+const {importDefaultContent} = require('./lib/db-defaultcontent');
 const {createHtaccess, makeDirStructure, installPluginsDependencies} = require('./lib/utils');
 
 /**
@@ -69,25 +68,13 @@ run(`unzip -qo content/${imagesDump} -d ${config.paths.local.uploads}`);
  * Database
  */
 console.log('Importing default database ...');
-if (!existsSync('content')) {
-  mkdirSync('content');
-}
-const dbName = 'planet4_dev';
-const dbDump = `planet4-defaultcontent_wordpress-${config.planet4.content.db}.sql.gz`;
-download(
-  `https://storage.googleapis.com/planet4-default-content/${dbDump}`,
-  `content/${dbDump}`
-);
-createDatabase(dbName);
-importDatabase(`content/${dbDump}`, dbName);
-useDatabase(dbName);
+importDefaultContent(config.planet4.content.db);
+
+/**
+ * Activate plugins
+ */
 wp('plugin activate --all');
 wp('plugin deactivate elasticpress');
-try {
-  wp('user create admin admin@planet4.test --user_pass=admin --role=administrator');
-} catch (error) {
-  wp('user update admin --user_pass=admin --user_email=admin@planet4.test --role=administrator');
-}
 
 console.log(
   `The local instance is now available at ${config.config.WP_SITEURL}`
