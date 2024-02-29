@@ -1,7 +1,7 @@
 const {existsSync, mkdirSync} = require('fs');
-const {wp} = require('./run');
 const {download} = require('./download');
 const {createDatabase, importDatabase, useDatabase} = require('./mysql');
+const {createAdminUser} = require('./admin-user');
 
 function importDefaultContent(dbVersion) {
   if (!existsSync('content')) {
@@ -24,11 +24,7 @@ function importDefaultContent(dbVersion) {
   importDatabase(`content/${dbDump}`, dbName);
 
   useDatabase(dbName);
-  try {
-    wp('user create admin admin@planet4.test --user_pass=admin --role=administrator');
-  } catch (error) {
-    wp('user update admin --user_pass=admin --user_email=admin@planet4.test --role=administrator');
-  }
+  createAdminUser();
 }
 
 module.exports = {

@@ -7,6 +7,7 @@ const {createHtaccess, makeDirStructure, cloneIfNotExists, readYaml} = require('
 const {createDatabase, importDatabase, databaseExists, useDatabase} = require('./lib/mysql');
 const {basename} = require('path');
 const {existsSync} = require('fs');
+const {createAdminUser} = require('./lib/admin-user');
 
 /**
  * Node version control
@@ -135,11 +136,7 @@ try {
 }
 
 // Create/update admin user
-try {
-  wp('user create admin admin@planet4.test --user_pass=admin --role=administrator');
-} catch (error) {
-  wp('user update admin --user_pass=admin --user_email=admin@planet4.test --role=administrator');
-}
+createAdminUser();
 if (themeName) {
   wp(`theme activate ${themeName}`);
 }

@@ -1,6 +1,6 @@
 const {existsSync} = require('fs');
-const {wp} = require('./lib/run');
 const {createDatabase, importDatabase, useDatabase} = require('./lib/mysql');
+const {createAdminUser} = require('./lib/admin-user');
 
 if (!process.argv[2] || !process.argv[3]) {
   console.log('Please use npm run db:import <gz file path> <database name>');
@@ -23,8 +23,4 @@ if (!dbName.match(/^[a-z0-9_]*$/)) {
 createDatabase(dbName);
 importDatabase(filepath, dbName);
 useDatabase(dbName);
-try {
-  wp('user create admin admin@planet4.test --user_pass=admin --role=administrator');
-} catch (error) {
-  wp('user update admin --user_pass=admin --user_email=admin@planet4.test --role=administrator');
-}
+createAdminUser();

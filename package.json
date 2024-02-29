@@ -24,6 +24,7 @@
     "nro:theme": "node ./scripts/nro-theme.js",
     "build:assets": "node ./scripts/build-assets.js",
     "build:repos": "node ./scripts/build-repos.js",
+    "db:admin": "node ./scripts/db-admin.js",
     "db:import": "node ./scripts/db-import.js",
     "db:reset": "node ./scripts/db-reset.js",
     "db:use": "node ./scripts/db-use.js",
