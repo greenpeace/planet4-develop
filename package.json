@@ -37,6 +37,9 @@
     "shell:mysql": "node ./scripts/shell.js mysql",
     "lint": "npx eslint scripts --fix",
     "test": "mocha --reporter mocha-junit-reporter --reporter-options mochaFile=junit.xml",
+    "lint:php": "node ./scripts/php-tests.js lint",
+    "lint:php:fix": "node ./scripts/php-tests.js fix",
+    "test:php": "node ./scripts/php-tests.js test",
     "prepare": "husky install"
   },
   "devDependencies": {
