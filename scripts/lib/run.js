@@ -44,4 +44,15 @@ function wp(cmd, opts) {
   return wpenvRun(`cli wp ${cmd}`, null, opts);
 }
 
-module.exports = {run, runWithOutput, cli, composer, wp};
+function runInContainer(container, cmd, opts) {
+  const wDir = opts.working_dir ?? null;
+  return run(
+    `docker compose -f $(npx wp-env install-path)/docker-compose.yml exec ${wDir ? '-w ' + wDir : ''} ${container} ${cmd}`
+  );
+}
+
+function runInWpContainer(cmd, opts) {
+  return runInContainer('wordpress', cmd, opts);
+}
+
+module.exports = {run, runWithOutput, cli, composer, wp, runInWpContainer};
