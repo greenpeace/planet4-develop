@@ -58,7 +58,7 @@ installPluginsDependencies(config);
  * Install development requirements
  */
 console.log('Installing development requirements ...');
-run('cp -n .wp-env.override.json.dist .wp-env.override.json');
+run('cp -n .wp-env.override.json.dist .wp-env.override.json || true');
 
 /**
  * Images

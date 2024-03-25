@@ -162,6 +162,8 @@ if (ciConfig) {
   wp(`search-replace ${nroUrl} ${newUrl} --precise --skip-columns=guid`);
 }
 
+wp('plugin deactivate elasticpress');
+
 console.log(
   `The local instance is now available at ${config.config.WP_SITEURL}`
 );
