@@ -9,7 +9,7 @@ const pluginPath = `${rootPath}/${config.paths.container.plugins}/planet4-plugin
 
 const args = parseArgs(process.argv, {command: 'lint'}); // lint, fix, test
 
-if (args.command === 'lint' || args.command === 'fix') {
+if (args.command === 'lint') {
   runInWpContainer('./vendor/bin/phpcs src/ page-templates/ tests/', {working_dir: themePath});
   runInWpContainer('./vendor/bin/phpcs classes/', {working_dir: pluginPath});
 }
