@@ -11,6 +11,21 @@
     },
     "composer": {
       "processTimeout": "600"
+    },
+    "xdebug": {
+      "version": "3.3.1",
+      "settings": {
+        "xdebug.mode": "debug,profile,trace",
+        "xdebug.start_with_request": "trigger",
+        "xdebug.trigger_value": "StartXdebug",
+        "xdebug.output_dir": "/var/www/html/wp-content",
+        "xdebug.profiler_output_name": "profile.%u.%R",
+        "xdebug.trace_output_name": "trace.%u.%R",
+        "xdebug.trace_format": "3",
+        "xdebug.client_port": "9003",
+        "xdebug.discover_client_host": "0",
+        "xdebug.client_host": "host.docker.internal"
+      }
     }
   }
 }

@@ -73,12 +73,14 @@ function parseArgs(args, def) {
   const options = args.filter(v => v.startsWith('--'));
   const commands = args.filter(v => !options.includes(v));
   const command = commands[0] || def?.command || null;
+  const targets = commands.slice(1).filter(v => !options.includes(v));
 
   const parsed = {
     interpreter,
     script,
     command,
     options,
+    targets,
   };
 
   if (process.env.VERBOSE) {
