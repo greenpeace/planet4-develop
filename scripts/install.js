@@ -5,6 +5,7 @@ const {download} = require('./lib/download');
 const {getBaseRepoFromGit, getMainReposFromGit, installRepos, buildAssets, setComposerConfig} = require('./lib/main-repos');
 const {generateBaseComposerRequirements} = require('./lib/composer-requirements');
 const {importDefaultContent} = require('./lib/db-defaultcontent');
+const {configureHosts} = require('./lib/hosts');
 const {createHtaccess, makeDirStructure, installPluginsDependencies} = require('./lib/utils');
 
 /**
@@ -12,6 +13,12 @@ const {createHtaccess, makeDirStructure, installPluginsDependencies} = require('
  */
 console.log('Node version: ' + process.version);
 nodeCheck();
+
+/**
+ * Configure hosts file
+ */
+console.log('Configure /etc/hosts file ...');
+configureHosts();
 
 /**
  * Config
