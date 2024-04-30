@@ -5,8 +5,8 @@
       "images": "1-25"
     },
     "repos": {
-      "planet4-base": "main",
-      "planet4-master-theme": "main"
+      "planet4-base": "feat/timber-2",
+      "planet4-master-theme": "feat/timber-2"
     },
     "composer": {
       "processTimeout": "600"
