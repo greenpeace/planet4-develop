@@ -45,7 +45,7 @@ function wp(cmd, opts) {
 }
 
 function runInContainer(container, cmd, opts) {
-  const wDir = opts.working_dir ?? null;
+  const wDir = opts?.working_dir ?? null;
   return run(
     `docker compose -f $(npx wp-env install-path)/docker-compose.yml exec ${wDir ? '-w ' + wDir : ''} ${container} ${cmd}`
   );
