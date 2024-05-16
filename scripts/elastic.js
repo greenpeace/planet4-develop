@@ -13,10 +13,11 @@ if (args.command === 'activate') {
   wp('plugin activate elasticpress');
   setTimeout(
     () => {
-      wp('elasticpress index --setup --yes --url=localhost');
+      wp('elasticpress clear-sync');
+      wp('elasticpress sync --setup --yes --url=localhost');
       wp('cache flush');
     },
-    3000
+    5000
   );
 }
 

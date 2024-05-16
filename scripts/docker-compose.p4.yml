@@ -5,13 +5,6 @@ services:
     image: ${REDIS_IMAGE:-redis:4-stretch}
 
   elasticsearch:
-    image: gcr.io/planet-4-151612/elasticsearch:${ELASTICSEARCH_BUILD_TAG:-latest}
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
     environment:
       - discovery.type=single-node
-
-  elastichq:
-    image: elastichq/elasticsearch-hq
-    environment:
-      HQ_DEFAULT_URL: http://elasticsearch:9200
-    ports:
-      - "5000:5000"
