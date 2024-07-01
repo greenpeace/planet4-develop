@@ -19,29 +19,36 @@ function check(cmd, title, fail) {
   }
 }
 
-checkForNewRelease();
+async function main() {
+  console.log('Shell: ');
+  console.log(process.env.SHELL);
 
-console.log('Shell: ');
-console.log(process.env.SHELL);
+  console.log('Node version: ' + process.version);
+  nodeCheck();
 
-console.log('Node version: ' + process.version);
-nodeCheck();
+  check(
+    'docker --version',
+    'Docker version:',
+    `${redCross} Not found. Please install Docker.`
+  );
+  check(
+    'docker compose version',
+    'Docker compose version:',
+    `${redCross} Not found. Please install or activate Docker compose v2.`
+  );
 
-check(
-  'docker --version',
-  'Docker version:',
-  `${redCross} Not found. Please install Docker.`
-);
-check(
-  'docker compose version',
-  'Docker compose version:',
-  `${redCross} Not found. Please install or activate Docker compose v2.`
-);
+  check('npx wp-env --version', 'wp-env version:', `${redCross} Not found. Please install wp-env.`);
+  wpenvCheck();
 
-check('npx wp-env --version', 'wp-env version:', `${redCross} Not found. Please install wp-env.`);
-wpenvCheck();
+  const nvmPath = process.env.NVM_DIR ? `${process.env.NVM_DIR}/nvm.sh` : '~/.nvm/nvm.sh';
+  check(`. ${nvmPath} && nvm --version`, 'nvm version:', `${redCross} Not found (nvm path used: ${nvmPath}). Please install NVM.`);
+  check('curl --version', 'curl version:', `${redCross} Not found. Please install Curl.`);
+  check('gcloud version', 'gcloud version:', `${orangeCross} Not found. Install gcloud only if you want to import NRO database.`);
+  console.log();
 
-const nvmPath = process.env.NVM_DIR ? `${process.env.NVM_DIR}/nvm.sh` : '~/.nvm/nvm.sh';
-check(`. ${nvmPath} && nvm --version`, 'nvm version:', `${redCross} Not found (nvm path used: ${nvmPath}). Please install NVM.`);
-check('curl --version', 'curl version:', `${redCross} Not found. Please install Curl.`);
-check('gcloud version', 'gcloud version:', `${orangeCross} Not found. Install gcloud only if you want to import NRO database.`);
+  await checkForNewRelease({
+    greenCheck, orangeCross, redCross,
+  });
+}
+
+main();
