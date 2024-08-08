@@ -4,6 +4,7 @@
   "description": "Planet 4 development environment",
   "author": "Planet 4",
   "scripts": {
+    "env:usage": "node usage",
     "env:requirements": "node ./scripts/requirements.js",
     "env:install": "node ./scripts/install.js",
     "env:start": "npx wp-env start",
