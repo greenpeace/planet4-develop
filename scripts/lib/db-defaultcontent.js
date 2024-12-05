@@ -1,4 +1,5 @@
 const {existsSync, mkdirSync} = require('fs');
+const {run} = require('./run');
 const {download} = require('./download');
 const {createDatabase, importDatabase, useDatabase} = require('./mysql');
 const {createAdminUser} = require('./admin-user');
@@ -9,6 +10,9 @@ function importDefaultContent(dbVersion) {
   }
   const dbName = 'planet4_dev';
   const dbDump = `planet4-defaultcontent_wordpress-${dbVersion}.sql.gz`;
+
+  // Make sure to remove the exising databases
+  run('rm -rf planet4-defaultcontent_wordpress-*.sql.gz');
 
   download(
     `https://storage.googleapis.com/planet4-default-content/${dbDump}`,
