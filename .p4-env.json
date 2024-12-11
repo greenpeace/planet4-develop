@@ -6,7 +6,7 @@
     },
     "repos": {
       "planet4-base": "main",
-      "planet4-master-theme": "main",
+      "planet4-master-theme": "wp6.7",
       "planet4-plugin-gutenberg-blocks": "main"
     },
     "composer": {
