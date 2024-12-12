@@ -163,6 +163,7 @@ if (ciConfig) {
 }
 
 wp('plugin deactivate elasticpress');
+wp('option update sm_mode "ephemeral"');
 
 console.log(
   `The local instance is now available at ${config.config.WP_SITEURL}`
