@@ -8,12 +8,19 @@ const {createDatabase, importDatabase, databaseExists, useDatabase} = require('.
 const {basename} = require('path');
 const {existsSync} = require('fs');
 const {createAdminUser} = require('./lib/admin-user');
+const {configureHosts} = require('./lib/hosts');
 
 /**
  * Node version control
  */
 console.log('Node version: ' + process.version);
 nodeCheck();
+
+/**
+ * Configure hosts file
+ */
+console.log('Configure /etc/hosts file ...');
+configureHosts();
 
 /**
  * Config
