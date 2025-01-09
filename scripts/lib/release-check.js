@@ -1,21 +1,11 @@
 const https = require('https');
 const {execSync} = require('child_process');
-const fs = require('fs');
 
 const user = 'greenpeace';
 const repo = 'planet4-develop';
 
-function getLocalVersion() {
-  const packageJSON = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-  return packageJSON.version;
-}
-
 function getLocalCommitHash() {
   return execSync('git rev-parse HEAD', {encoding: 'utf8'}).trim();
-}
-
-function getLocalBranch() {
-  return execSync('git branch --show-current', {encoding: 'utf8'}).trim();
 }
 
 function fetchLatestReleaseInfo() {
@@ -45,26 +35,31 @@ function fetchLatestReleaseInfo() {
   });
 }
 
-function compareVersions(versionA, versionB) {
-  const normalizeVersion = version =>
-    version.startsWith('v') ? version.slice(1) : version;
+function fetchTagCommitHash(tag_name) {
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: 'api.github.com',
+      path: `/repos/${user}/${repo}/git/refs/tags/${tag_name}`,
+      method: 'GET',
+      headers: {'User-Agent': 'Planet 4 dev env'},
+    };
 
-  const partsA = normalizeVersion(versionA).split('.').map(Number);
-  const partsB = normalizeVersion(versionB).split('.').map(Number);
+    https
+      .get(options, res => {
+        let data = '';
 
-  for (let i = 0; i < Math.max(partsA.length, partsB.length); i++) {
-    const partA = partsA[i] || 0;
-    const partB = partsB[i] || 0;
+        res.on('data', chunk => {
+          data += chunk;
+        });
 
-    if (partA > partB) {
-      return 1;
-    }
-    if (partA < partB) {
-      return -1;
-    }
-  }
-
-  return 0;
+        res.on('end', () => {
+          resolve(JSON.parse(data));
+        });
+      })
+      .on('error', err => {
+        reject(err);
+      });
+  });
 }
 
 function checkForNewRelease() {
@@ -74,26 +69,24 @@ function checkForNewRelease() {
 
   releaseInfo.then(info => {
     const latestVersion = info.tag_name;
-    const localVersion = getLocalVersion();
 
-    if (compareVersions(localVersion, latestVersion) === -1) {
-      console.log(
-        `\nNew Planet 4 developer environment release available: ${latestVersion}`
-      );
-      console.log('You should update !');
-    }
+    const tagInfo = fetchTagCommitHash(latestVersion).catch(err => {
+      console.error('Error fetching tag information:', err.message);
+    });
 
-    const latestCommitHash = info.target_commitish;
-    const localCommitHash = getLocalCommitHash();
+    tagInfo.then(data => {
+      const tag_hash = data.object.sha;
 
-    if (
-      getLocalBranch() === 'main' &&
-			localCommitHash !== latestCommitHash
-    ) {
-      console.log(
-        `\nYour local commit (${localCommitHash}) does not match the latest release commit (${latestCommitHash})`
-      );
-    }
+      const localCommitHash = getLocalCommitHash();
+
+      if (localCommitHash !== tag_hash) {
+        console.log(
+          `\nNew Planet 4 developer environment release available: ${latestVersion}`
+        );
+        console.log('You should update!');
+      }
+
+    });
   });
 }
 
