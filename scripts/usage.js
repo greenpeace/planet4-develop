@@ -30,6 +30,9 @@ const usage = `
     shell:php                         Access PHP shell (WordPress container)
     shell:mysql                       Access MySQL console (current database)
 
+    logs:php                          Shows logs from the php (wordpress) container
+    logs:mysql                        Shows logs from the mysql container
+
     elastic:activate                  Activate ElasticSearch container and plugin
     elastic:deactivate                Deactivate ElasticSearch container and plugin
 
