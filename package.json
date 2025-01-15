@@ -26,7 +26,6 @@
     "env:status": "docker compose -f $(npx wp-env install-path)/docker-compose.yml -f scripts/docker-compose.p4.yml ps --all",
     "env:stop": "npx wp-env stop",
     "env:update": "node ./scripts/update.js",
-    "env:usage": "node usage",
     "lint:php:fix": "node ./scripts/php-tests.js fix",
     "lint:php": "node ./scripts/php-tests.js lint",
     "lint": "npx eslint scripts --fix",
@@ -41,6 +40,7 @@
     "shell": "node ./scripts/shell.js php",
     "test:php": "node ./scripts/php-tests.js test",
     "test": "mocha --reporter mocha-junit-reporter --reporter-options mochaFile=junit.xml",
+    "usage": "node ./scripts/usage.js",
     "xdebug:configure": "node ./scripts/xdebug.js configure",
     "xdebug:flamegraph": "node ./scripts/xdebug.js flamegraph",
     "xdebug:install": "node ./scripts/xdebug.js install"
