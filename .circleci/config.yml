@@ -16,7 +16,7 @@ commands:
 jobs:
   lint:
     docker:
-      - image: node:20.18.0
+      - image: node:20
     environment:
       - NODE_ENV: "development"
     steps:
@@ -29,7 +29,7 @@ jobs:
 
   unit-test:
     docker:
-      - image: node:20.18.0
+      - image: node:20
     environment:
       - NODE_ENV: "development"
     parameters:
