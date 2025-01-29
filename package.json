@@ -61,7 +61,7 @@
     "mocha-junit-reporter": "2.2.0"
   },
   "dependencies": {
-    "@wordpress/env": "9.4.0",
+    "@wordpress/env": "10.16.0",
     "js-yaml": "4.1.0"
   },
   "lint-staged": {
