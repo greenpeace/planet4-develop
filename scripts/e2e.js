@@ -24,16 +24,10 @@ if (args.command === 'install') {
   run(`npx playwright install ${args.options.join(' ')}`, {
     cwd: `${config.paths.local.themes}/planet4-master-theme`,
   });
-  run(`npx playwright install ${args.options.join(' ')}`, {
-    cwd: `${config.paths.local.plugins}/planet4-plugin-gutenberg-blocks`,
-  });
 }
 
 if (args.command === 'run') {
   run(`npx playwright test ${args.options.join(' ')} --pass-with-no-tests`, {
     cwd: `${config.paths.local.themes}/planet4-master-theme`,
-  });
-  run(`npx playwright test ${args.options.join(' ')} --pass-with-no-tests`, {
-    cwd: `${config.paths.local.plugins}/planet4-plugin-gutenberg-blocks`,
   });
 }
