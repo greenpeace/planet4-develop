@@ -21,15 +21,6 @@ function generateBaseComposerRequirements(config) {
     );
   }
 
-  if (
-    isDir(`${config.paths.local.plugins}/planet4-plugin-gutenberg-blocks`)
-  ) {
-    composer(
-      'remove --no-update greenpeace/planet4-plugin-gutenberg-blocks',
-      config.paths.container.app
-    );
-  }
-
   composer(
     'remove --no-update greenpeace/planet4-nginx-helper',
     config.paths.container.app

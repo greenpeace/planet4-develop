@@ -93,7 +93,6 @@ if (theme) {
 }
 
 composer('update', config.paths.container.app);
-// installPluginsDependencies(config)
 if (themeName) {
   wp(`theme activate ${themeName}`);
 }

@@ -29,40 +29,20 @@ function getMainReposFromGit(config) {
     } || true`,
     {cwd: themePath}
   );
-
-  const pluginPath = `${config.paths.local.plugins}/planet4-plugin-gutenberg-blocks`;
-  if(isRepo(pluginPath)) {
-    run('git status', {cwd: pluginPath});
-  } else {
-    run(`rm -rf ${pluginPath} && git clone --recurse-submodules --shallow-submodule https://github.com/greenpeace/planet4-plugin-gutenberg-blocks.git ${pluginPath}`);
-  }
-
-  run(
-    `git checkout ${
-      config.planet4.repos['planet4-plugin-gutenberg-blocks'] || 'main'
-    } || true`,
-    {cwd: pluginPath}
-  );
 }
 
 function getMainReposFromRelease(config, force = false) {
   if (
     !force &&
-		isDir(`${config.paths.local.themes}/planet4-master-theme`) &&
-		isDir(`${config.paths.local.plugins}/planet4-plugin-gutenberg-blocks`)
+		isDir(`${config.paths.local.themes}/planet4-master-theme`)
   ) {
     return;
   }
 
   const themeRelease =
 		'https://github.com/greenpeace/planet4-master-theme/releases/latest/download/planet4-master-theme.zip';
-  const pluginRelease =
-		'https://github.com/greenpeace/planet4-plugin-gutenberg-blocks/releases/latest/download/planet4-plugin-gutenberg-blocks.zip';
 
   run(`curl -L ${themeRelease} > content/planet4-master-theme.zip`);
-  run(
-    `curl -L ${pluginRelease} > content/planet4-plugin-gutenberg-blocks.zip`
-  );
 
   run(
     `mkdir -p ${config.paths.local.themes} && mkdir -p ${config.paths.local.plugins}`
@@ -70,26 +50,19 @@ function getMainReposFromRelease(config, force = false) {
   run(
     `unzip -o content/planet4-master-theme.zip -d ${config.paths.local.themes}/planet4-master-theme`
   );
-  run(
-    `unzip -o content/planet4-plugin-gutenberg-blocks.zip -d ${config.paths.local.plugins}/planet4-plugin-gutenberg-blocks`
-  );
 }
 
 function installRepos(config) {
-  // composer(`config platform.php "${config.phpVersion}"`, `/app/${config.themesDir}/planet4-master-theme `)
   composer(
     'install',
     `${config.paths.container.themes}/planet4-master-theme `
   );
-  // composer(`config platform.php "${config.phpVersion}"`, `/app/${config.pluginsDir}/planet4-plugin-gutenberg-blocks`)
-  composer('install', `${config.paths.container.plugins}/planet4-plugin-gutenberg-blocks`);
 }
 
 function installNpmDependencies (config) {
   process.env.PUPPETEER_SKIP_DOWNLOAD = true;
   process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true;
   run('npm install --legacy-peer-deps', {cwd: `${config.paths.local.themes}/planet4-master-theme`});
-  run('npm install', {cwd: `${config.paths.local.plugins}/planet4-plugin-gutenberg-blocks`});
 }
 
 function buildAssets(config, force = false) {
@@ -97,9 +70,6 @@ function buildAssets(config, force = false) {
     !force &&
 		isDir(
 		  `${config.paths.local.themes}/planet4-master-theme/assets/build`
-		) &&
-		isDir(
-		  `${config.paths.local.plugins}/planet4-plugin-gutenberg-blocks/assets/build`
 		)
   ) {
     return;
@@ -108,9 +78,6 @@ function buildAssets(config, force = false) {
   installNpmDependencies(config);
   run('npm run build', {
     cwd: `${config.paths.local.themes}/planet4-master-theme`,
-  });
-  run('npm run build', {
-    cwd: `${config.paths.local.plugins}/planet4-plugin-gutenberg-blocks`,
   });
 }
 
