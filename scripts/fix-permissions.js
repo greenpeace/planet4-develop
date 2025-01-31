@@ -13,7 +13,4 @@ if (all) {
   run(
     `sudo find ${config.paths.local.themes}/planet4-master-theme -not -user $(whoami) -exec chown -f $(whoami) {} \\+`
   );
-  run(
-    `sudo find ${config.paths.local.plugins}/planet4-plugin-gutenberg-blocks -not -user $(whoami) -exec chown -f $(whoami) {} \\+`
-  );
 }
