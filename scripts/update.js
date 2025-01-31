@@ -29,19 +29,14 @@ if (isRepo(`${config.paths.local.app}/planet4-base`)) {
 
 // main repos
 if (
-  isRepo(`${config.paths.local.themes}/planet4-master-theme`) &&
-	isRepo(`${config.paths.local.plugins}/planet4-plugin-gutenberg-blocks`)
+  isRepo(`${config.paths.local.themes}/planet4-master-theme`)
 ) {
   run('git pull || true', {
     cwd: `${config.paths.local.themes}/planet4-master-theme`,
   });
-  run('git pull || true', {
-    cwd: `${config.paths.local.plugins}/planet4-plugin-gutenberg-blocks`,
-  });
   installRepos(config);
 } else if (
-  isDir(`${config.paths.local.themes}/planet4-master-theme`) &&
-	isDir(`${config.paths.local.plugins}/planet4-plugin-gutenberg-blocks`)
+  isDir(`${config.paths.local.themes}/planet4-master-theme`)
 ) {
   getMainReposFromRelease(config, true);
   installRepos(config);

@@ -93,7 +93,6 @@ if (theme) {
 }
 
 composer('update', config.paths.container.app);
-// installPluginsDependencies(config)
 if (themeName) {
   wp(`theme activate ${themeName}`);
 }
@@ -170,6 +169,7 @@ if (ciConfig) {
 }
 
 wp('plugin deactivate elasticpress');
+wp('plugin deactivate planet4-plugin-gutenberg-blocks');
 wp('option update sm_mode "ephemeral"');
 
 console.log(
