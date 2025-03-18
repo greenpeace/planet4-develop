@@ -88,7 +88,6 @@ importDefaultContent(config.planet4.content.db);
  */
 wp('plugin activate --all');
 wp('plugin deactivate elasticpress');
-wp('plugin deactivate planet4-plugin-gutenberg-blocks');
 wp('option update sm_mode "ephemeral"');
 run('npx wp-env run cli wp plugin install query-monitor');
 
