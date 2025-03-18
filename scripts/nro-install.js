@@ -169,7 +169,6 @@ if (ciConfig) {
 }
 
 wp('plugin deactivate elasticpress');
-wp('plugin deactivate planet4-plugin-gutenberg-blocks');
 wp('option update sm_mode "ephemeral"');
 
 console.log(
