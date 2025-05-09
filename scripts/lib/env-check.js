@@ -15,7 +15,7 @@ function nodeCheck() {
 }
 
 function wpenvCheck () {
-  const versionRequired = '9';
+  const versionRequired = '10';
   const versionRunning = runWithOutput('npx wp-env --version').split('.')[0];
   if (versionRequired !== versionRunning) {
     console.error(
