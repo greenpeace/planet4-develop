@@ -141,7 +141,7 @@ jobs:
               nvm use
               npm install
               npm run env:requirements
-              VERBOSE=true npm run nro:install peru
+              VERBOSE=true npm run env:install peru
       - when:
           condition: << parameters.notify >>
           steps:
