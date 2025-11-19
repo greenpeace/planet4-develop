@@ -81,6 +81,7 @@ const theme = keys[0] || null;
  * Install NRO theme & plugins
  */
 let themeName = null;
+run('npx wp-env run cli sudo mkdir -p /app/source/artifacts');
 if (theme) {
   themeName = theme.replace('greenpeace/', '');
   const themePath = `${config.paths.local.themes}/${themeName}`;

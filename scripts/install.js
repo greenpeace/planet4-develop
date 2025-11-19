@@ -58,6 +58,7 @@ generateBaseComposerRequirements(config);
  * Install themes/plugins
  */
 console.log('Installing & activating plugins ...');
+run('npx wp-env run cli sudo mkdir -p /app/source/artifacts');
 composer('update', config.paths.container.app);
 installPluginsDependencies(config);
 
