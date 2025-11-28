@@ -36,6 +36,9 @@ const usage = `
     elastic:activate                  Activate ElasticSearch container and plugin
     elastic:deactivate                Deactivate ElasticSearch container and plugin
 
+    phpmyadmin:activate               Activate phpMyAdmin container
+    phpmyadmin:deactivate             Deactivate phpMyAdmin container
+
     xdebug:install                    Install Xdebug in WordPress container
     xdebug:configure                  Rewrite Xdebug configuration and reload server
     xdebug:flamegraph <trace>         Generate a flamegraph from a Xdebug trace file
