@@ -37,6 +37,8 @@
     "nro:install": "node ./scripts/nro-install.js",
     "nro:theme": "node ./scripts/nro-theme.js",
     "prepare": "husky install",
+    "phpmyadmin:activate": "node ./scripts/phpmyadmin.js activate",
+    "phpmyadmin:deactivate": "node ./scripts/phpmyadmin.js deactivate",
     "shell:mysql": "node ./scripts/shell.js mysql",
     "shell:php:root": "node ./scripts/shell.js php:root",
     "shell:php": "node ./scripts/shell.js php",
