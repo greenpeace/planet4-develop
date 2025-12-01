@@ -20,7 +20,8 @@ function getMainReposFromGit(config) {
   if(isRepo(themePath)) {
     run('git status', {cwd: themePath});
   } else {
-    run(`rm -rf ${themePath} && git clone https://github.com/greenpeace/planet4-master-theme.git ${themePath}`);
+    const gitProtocol = config.config.GIT_PROTOCOL === 'ssh' ? 'git@github.com:' : 'https://github.com/';
+    run(`rm -rf ${themePath} && git clone ${gitProtocol}greenpeace/planet4-master-theme.git ${themePath}`);
   }
 
   run(

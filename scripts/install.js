@@ -53,18 +53,18 @@ console.log('Merging base composer requirements ...');
 generateBaseComposerRequirements(config);
 
 /**
+ * Install development requirements
+ */
+console.log('Installing development requirements ...');
+run('cp -n .wp-env.override.json.dist .wp-env.override.json || true');
+
+/**
  * Install themes/plugins
  */
 console.log('Installing & activating plugins ...');
 run('npx wp-env run cli sudo mkdir -p /app/source/artifacts');
 composer('update', config.paths.container.app);
 installPluginsDependencies(config);
-
-/**
- * Install development requirements
- */
-console.log('Installing development requirements ...');
-run('cp -n .wp-env.override.json.dist .wp-env.override.json || true');
 
 /**
  * Run NRO deployment tasks
@@ -90,7 +90,8 @@ if (config.nro) {
   if (theme) {
     themeName = theme.replace('greenpeace/', '');
     const themePath = `${config.paths.local.themes}/${themeName}`;
-    cloneIfNotExists(themePath, `https://github.com/${theme}.git`);
+    const nroGitProtocol = config.config.NRO_GIT_PROTOCOL === 'https' ? 'https://github.com/' : 'git@github.com:';
+    cloneIfNotExists(themePath, `${nroGitProtocol}${theme}.git`);
     composer(`remove --no-update ${theme}`, config.paths.container.app);
 
     if (existsSync(`${themePath}/composer.json`)) {
