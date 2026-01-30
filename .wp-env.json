@@ -1,5 +1,5 @@
 {
-  "phpVersion": "8.1",
+  "phpVersion": "8.3",
   "core": "WordPress/WordPress#6.9",
   "mappings": {
     "wp-content": "./planet4"
