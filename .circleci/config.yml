@@ -65,6 +65,8 @@ jobs:
   env-install:
     machine:
       image: ubuntu-2204:2023.02.1
+      docker_layer_caching: true
+    resource_class: xlarge
     parameters:
       notify:
         type: boolean
