@@ -2,7 +2,7 @@ const {getConfig} = require('./lib/config');
 const {run, runWithOutput, composer, wp} = require('./lib/run');
 const {getBaseRepoFromGit, getMainReposFromGit, installRepos, buildAssets, setComposerConfig} = require('./lib/main-repos');
 const {generateBaseComposerRequirements, generateNROComposerRequirements} = require('./lib/composer-requirements');
-const {installPluginsDependencies, createHtaccess, makeDirStructure, cloneIfNotExists, readYaml} = require('./lib/utils');
+const {installPluginsDependencies, createHtaccess, makeDirStructure, cloneIfNotExists, readYaml, disableSso} = require('./lib/utils');
 const {createDatabase, importDatabase, databaseExists, useDatabase} = require('./lib/mysql');
 const {importDefaultContent} = require('./lib/db-defaultcontent');
 const {basename} = require('path');
@@ -157,6 +157,7 @@ if (importDB) {
           }
         }
       }
+      disableSso();
     } catch (error) {
       console.log('Error trying to import NRO database.');
       if (process.env.VERBOSE) {

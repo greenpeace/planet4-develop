@@ -1,6 +1,7 @@
 const {existsSync} = require('fs');
 const {createDatabase, importDatabase, useDatabase} = require('./lib/mysql');
 const {createAdminUser} = require('./lib/admin-user');
+const {disableSso} = require('./lib/utils');
 
 if (!process.argv[2] || !process.argv[3]) {
   console.log('Please use npm run db:import <gz file path> <database name>');
@@ -22,5 +23,6 @@ if (!dbName.match(/^[a-z0-9_]*$/)) {
 
 createDatabase(dbName);
 importDatabase(filepath, dbName);
+disableSso();
 useDatabase(dbName);
 createAdminUser();
