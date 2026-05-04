@@ -106,6 +106,7 @@ function getHostUser () {
 function disableSso() {
   try {
     run('npx wp-env run cli wp option patch delete planet4_features enforce_sso');
+    run('npx wp-env run cli wp option patch delete galogin ga_auto_login');
   } catch (e) {
     console.error('Failed to disable SSO:', e);
   }
