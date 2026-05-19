@@ -157,7 +157,6 @@ if (importDB) {
           }
         }
       }
-      disableSso();
     } catch (error) {
       console.log('Error trying to import NRO database.');
       if (process.env.VERBOSE) {
@@ -176,6 +175,9 @@ if (importDB) {
     importDefaultContent(config.planet4.content.db);
   }
 }
+
+// Disable SSO
+disableSso();
 
 // Create/update admin user
 createAdminUser();
