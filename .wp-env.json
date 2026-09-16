@@ -1,6 +1,6 @@
 {
   "phpVersion": "8.3",
-  "core": "WordPress/WordPress#7.0.2",
+  "core": "WordPress/WordPress#7.1",
   "mappings": {
     "wp-content": "./planet4"
   },
